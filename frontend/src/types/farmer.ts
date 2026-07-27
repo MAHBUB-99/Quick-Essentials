@@ -1,12 +1,5 @@
 export type FarmerSpecialty =
-  | 'vegetables'
-  | 'fruits'
-  | 'grains'
-  | 'dairy'
-  | 'herbs'
-  | 'honey'
-  | 'organic'
-  | 'hydroponic';
+  'vegetables' | 'fruits' | 'grains' | 'dairy' | 'herbs' | 'honey' | 'organic' | 'hydroponic';
 
 export interface SpecialtyTag {
   label: string;

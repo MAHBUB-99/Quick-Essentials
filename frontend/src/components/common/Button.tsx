@@ -1,7 +1,7 @@
 import { Slot } from '@radix-ui/react-slot';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { forwardRef, type ButtonHTMLAttributes } from 'react';
-import { Spinner } from '@/components/feedback/Spinner';
+import { Icon } from '@/components/common/Icon';
 import { cn } from '@/utils/cn';
 
 /**
@@ -22,9 +22,9 @@ const buttonVariants = cva(
           'bg-gray-200 text-gray-900 hover:bg-gray-300 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600',
         outline:
           'border border-gray-300 text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700',
-        destructive:
-          'border border-red-300 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/40',
-        ghost: 'text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-primary-400',
+        destructive: 'border border-red-300 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/40',
+        ghost:
+          'text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-primary-400',
       },
       size: {
         sm: 'px-3 py-1.5 text-sm',
@@ -41,15 +41,25 @@ const buttonVariants = cva(
 );
 
 export interface ButtonProps
-  extends ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {
+  extends ButtonHTMLAttributes<HTMLButtonElement>, VariantProps<typeof buttonVariants> {
   /** Render as the single child element (e.g. an anchor / router Link). */
   asChild?: boolean;
   isLoading?: boolean;
 }
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
-  { className, variant, size, fullWidth, emphasize, asChild, isLoading, children, disabled, ...props },
+  {
+    className,
+    variant,
+    size,
+    fullWidth,
+    emphasize,
+    asChild,
+    isLoading,
+    children,
+    disabled,
+    ...props
+  },
   ref,
 ) {
   const Comp = asChild ? Slot : 'button';
@@ -72,5 +82,3 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
     </Comp>
   );
 });
-
-export { buttonVariants };

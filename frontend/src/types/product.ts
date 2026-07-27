@@ -1,13 +1,7 @@
 import type { RatingSummary } from './common';
 
 /** Product category slugs — align with the create/filter selects in the templates. */
-export type CategorySlug =
-  | 'vegetables'
-  | 'fruits'
-  | 'grains'
-  | 'dairy'
-  | 'herbs'
-  | 'honey';
+export type CategorySlug = 'vegetables' | 'fruits' | 'grains' | 'dairy' | 'herbs' | 'honey';
 
 export interface Category {
   slug: CategorySlug;
