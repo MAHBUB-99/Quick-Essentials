@@ -23,7 +23,7 @@ export function UnauthorizedPage() {
       <p className="text-6xl">🔒</p>
       <h1 className="mt-5 text-3xl font-bold">Access restricted</h1>
       <p className="mt-3 text-gray-600 dark:text-gray-400">
-        Sign in with an authorized farmer account to view this page.
+        Sign in with an authorized seller account to view this page.
       </p>
       <Button asChild className="mt-7">
         <Link to={ROUTES.login}>Sign In</Link>

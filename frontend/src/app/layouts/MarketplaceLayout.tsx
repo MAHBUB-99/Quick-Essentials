@@ -9,7 +9,7 @@ export function MarketplaceLayout() {
         Skip to content
       </a>
       <SiteHeader />
-      <main id="main-content" className="flex-1">
+      <main id="main-content" className="flex flex-1 flex-col">
         <Outlet />
       </main>
       <SiteFooter />

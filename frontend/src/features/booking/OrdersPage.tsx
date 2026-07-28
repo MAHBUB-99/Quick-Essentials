@@ -55,7 +55,7 @@ export function OrdersPage() {
                   <div className="flex-1">
                     <h3 className="font-medium">{item.name}</h3>
                     <p className="text-sm text-gray-500">
-                      {item.farmName} · {item.quantity} {item.unit}
+                      {item.quantity} {item.unit}
                     </p>
                   </div>
                   <span>{formatCurrency(item.unitPrice * item.quantity)}</span>

@@ -135,7 +135,7 @@ export function CreateListingPage() {
         <fieldset>
           <legend className="mb-3 font-medium">Product Features</legend>
           <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-4">
-            {['Organic', 'Pesticide Free', 'Fresh', 'Non-GMO', 'Local', 'Sustainable'].map(
+            {['Organic', 'Pesticide Free', 'Fresh', 'Non-GMO', 'Quality Checked', 'Sustainable'].map(
               (feature) => (
                 <label key={feature}>
                   <input type="checkbox" className="mr-2 rounded" />

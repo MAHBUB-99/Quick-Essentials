@@ -21,7 +21,6 @@ export interface Order {
   serviceFee: number;
   total: number;
   deliveryAddress: string;
-  paymentMethod: 'card' | 'bkash' | 'nagad';
+  paymentMethod: 'cash-on-delivery';
   placedAt: string;
-  transactionId?: string;
 }

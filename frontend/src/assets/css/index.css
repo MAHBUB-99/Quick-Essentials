@@ -36,6 +36,21 @@
     @apply max-w-full;
   }
 
+  .nav-search-input:-webkit-autofill,
+  .nav-search-input:-webkit-autofill:hover,
+  .nav-search-input:-webkit-autofill:focus {
+    -webkit-text-fill-color: #111827;
+    box-shadow: 0 0 0 1000px #f9fafb inset;
+    caret-color: #16a34a;
+  }
+
+  .dark .nav-search-input:-webkit-autofill,
+  .dark .nav-search-input:-webkit-autofill:hover,
+  .dark .nav-search-input:-webkit-autofill:focus {
+    -webkit-text-fill-color: #ffffff;
+    box-shadow: 0 0 0 1000px #111827 inset;
+  }
+
   /* Consistent focus ring for keyboard users across the design system. */
   :focus-visible {
     @apply outline-none ring-2 ring-primary-500 ring-offset-2 ring-offset-white dark:ring-offset-gray-900;
@@ -51,9 +66,31 @@
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
   }
+
+  .offer-ticker-track {
+    animation: none !important;
+    transform: none !important;
+  }
 }
 
 @layer utilities {
+  @keyframes offer-ticker {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  .offer-ticker-track {
+    animation: offer-ticker 28s linear infinite;
+  }
+
+  .offer-ticker-track:hover {
+    animation-play-state: paused;
+  }
+
   /* Prose helper used by the product description tab (matches template look). */
   .prose-farm :where(h3) {
     @apply mb-3 text-lg font-semibold text-gray-900 dark:text-white;

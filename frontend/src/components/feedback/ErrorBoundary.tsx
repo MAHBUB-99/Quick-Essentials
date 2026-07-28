@@ -21,7 +21,7 @@ export class ErrorBoundary extends Component<{ children: ReactNode }, State> {
       return (
         <main className="flex min-h-screen items-center justify-center p-6">
           <div className="max-w-lg text-center">
-            <h1 className="text-3xl font-bold">FarmFresh hit an unexpected error</h1>
+            <h1 className="text-3xl font-bold">QuickEssentials hit an unexpected error</h1>
             <p className="mt-3 text-gray-600 dark:text-gray-400">
               Your data is safe. Reload the app to try again.
             </p>

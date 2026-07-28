@@ -1,4 +1,4 @@
-# FarmFresh frontend
+# QuickEssentials frontend
 
 React 19 + TypeScript conversion of the HTML designs in `/templates`. The original
 Tailwind design tokens, responsive structure, dark theme, card styling, and page

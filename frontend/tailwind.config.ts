@@ -3,7 +3,7 @@ import type { Config } from 'tailwindcss';
 /**
  * Design tokens extracted verbatim from the source-of-truth HTML templates
  * (identical inline `tailwind.config` across every /templates/*.html file).
- * Do not change these values — they define the FarmFresh visual identity.
+ * Do not change these values — they define the QuickEssentials visual identity.
  */
 const config: Config = {
   darkMode: 'class',

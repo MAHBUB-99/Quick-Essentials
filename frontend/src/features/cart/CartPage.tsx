@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/common/Button';
 import { Icon } from '@/components/common/Icon';
 import { EmptyState } from '@/components/feedback/PageState';
+import { BrandedPageBackground } from '@/components/layout/BrandedPageBackground';
 import { ROUTES } from '@/constants/routes';
 import { useCart } from './CartContext';
 import { formatCurrency } from '@/utils/format';
@@ -9,12 +10,13 @@ import { formatCurrency } from '@/utils/format';
 export function CartPage() {
   const { items, total, remove, setQuantity } = useCart();
   return (
-    <div className="mx-auto max-w-7xl px-4 py-12">
+    <BrandedPageBackground>
+      <div className="mx-auto max-w-7xl px-4 py-10">
       <h1 className="mb-8 text-3xl font-bold">Shopping Cart</h1>
       {items.length === 0 ? (
         <EmptyState
           title="Your cart is empty"
-          message="Fresh local produce is only a few clicks away."
+          message="Your everyday essentials are only a few clicks away."
         />
       ) : (
         <div className="grid gap-8 lg:grid-cols-[1fr_22rem]">
@@ -31,7 +33,6 @@ export function CartPage() {
                 />
                 <div className="flex-1">
                   <h2 className="font-semibold">{item.name}</h2>
-                  <p className="text-sm text-gray-500">{item.farmName}</p>
                   <p className="mt-2 font-bold text-primary-600">
                     {formatCurrency(item.unitPrice)}/{item.unit}
                   </p>
@@ -79,9 +80,10 @@ export function CartPage() {
           </aside>
         </div>
       )}
-      <Link to={ROUTES.products} className="mt-8 inline-block text-primary-600">
+      <Link to={ROUTES.home} className="mt-8 inline-block text-primary-600">
         ← Continue shopping
       </Link>
-    </div>
+      </div>
+    </BrandedPageBackground>
   );
 }

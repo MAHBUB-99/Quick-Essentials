@@ -1,9 +1,9 @@
 {
-  "name": "farmfresh-frontend",
+  "name": "quickessentials-frontend",
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "description": "FarmFresh — local farmer produce marketplace (React 19 + TypeScript).",
+  "description": "QuickEssentials — local farmer produce marketplace (React 19 + TypeScript).",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",

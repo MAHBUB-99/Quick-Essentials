@@ -6,7 +6,6 @@ export const ROUTES = {
   home: '/',
   products: '/products',
   productDetails: (id: string | number = ':id') => `/products/${id}`,
-  farmers: '/farmers',
   about: '/about',
   cart: '/cart',
   favourites: '/favourites',

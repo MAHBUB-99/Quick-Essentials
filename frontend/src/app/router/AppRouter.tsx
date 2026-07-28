@@ -1,5 +1,5 @@
 import { lazy, Suspense } from 'react';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
 import { MarketplaceLayout } from '@/app/layouts/MarketplaceLayout';
 import { PageLoader } from '@/components/feedback/PageState';
 import { ROUTES, ROUTE_PATTERNS } from '@/constants/routes';
@@ -8,16 +8,10 @@ import { NotFoundPage, RouteErrorPage, UnauthorizedPage } from '@/features/error
 const HomePage = lazy(() =>
   import('@/features/home/HomePage').then((module) => ({ default: module.HomePage })),
 );
-const ProductsPage = lazy(() =>
-  import('@/features/products/ProductsPage').then((module) => ({ default: module.ProductsPage })),
-);
 const ProductDetailsPage = lazy(() =>
   import('@/features/products/ProductDetailsPage').then((module) => ({
     default: module.ProductDetailsPage,
   })),
-);
-const FarmersPage = lazy(() =>
-  import('@/features/farmers/FarmersPage').then((module) => ({ default: module.FarmersPage })),
 );
 const AboutPage = lazy(() =>
   import('@/features/about/AboutPage').then((module) => ({ default: module.AboutPage })),
@@ -69,9 +63,8 @@ const router = createBrowserRouter([
     errorElement: <RouteErrorPage />,
     children: [
       { path: ROUTES.home, element: suspense(<HomePage />) },
-      { path: ROUTES.products, element: suspense(<ProductsPage />) },
+      { path: ROUTES.products, element: <Navigate to={ROUTES.home} replace /> },
       { path: ROUTE_PATTERNS.productDetails, element: suspense(<ProductDetailsPage />) },
-      { path: ROUTES.farmers, element: suspense(<FarmersPage />) },
       { path: ROUTES.about, element: suspense(<AboutPage />) },
       { path: ROUTES.cart, element: suspense(<CartPage />) },
       { path: ROUTES.login, element: suspense(<LoginPage />) },

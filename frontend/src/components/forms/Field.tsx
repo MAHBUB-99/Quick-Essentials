@@ -41,11 +41,17 @@ export const Field = forwardRef<
 export const TextareaField = forwardRef<
   HTMLTextAreaElement,
   BaseProps & TextareaHTMLAttributes<HTMLTextAreaElement>
->(function TextareaField({ label, error, id, ...props }, ref) {
+>(function TextareaField({ label, error, id, className, ...props }, ref) {
   return (
     <label htmlFor={id} className="block text-sm font-medium text-gray-700 dark:text-gray-300">
       {label}
-      <textarea id={id} ref={ref} className={control} aria-invalid={!!error} {...props} />
+      <textarea
+        id={id}
+        ref={ref}
+        className={cn(control, className)}
+        aria-invalid={!!error}
+        {...props}
+      />
       {error && <span className="mt-1 block text-sm text-red-600">{error}</span>}
     </label>
   );

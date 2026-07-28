@@ -8,13 +8,37 @@ export async function getProducts(query: ProductQuery = {}): Promise<Product[]> 
   // TODO(.NET API): replace with GET /api/products using the configured Axios client.
   await wait();
   const search = query.search?.trim().toLowerCase();
-  return mockProducts.filter(
+  const filtered = mockProducts.filter(
     (product) =>
       (!search ||
         product.name.toLowerCase().includes(search) ||
         product.farmName.toLowerCase().includes(search)) &&
-      (!query.categories?.length || query.categories.includes(product.category)),
+      (!query.categories?.length || query.categories.includes(product.category)) &&
+      (query.priceMin === undefined || product.price >= query.priceMin) &&
+      (query.priceMax === undefined || product.price <= query.priceMax) &&
+      (!query.location ||
+        product.location.toLowerCase().includes(query.location.trim().toLowerCase())) &&
+      (!query.organicOnly || product.features.includes('organic')),
   );
+
+  return [...filtered].sort((a, b) => {
+    switch (query.sort) {
+      case 'price-asc':
+        return a.price - b.price;
+      case 'price-desc':
+        return b.price - a.price;
+      case 'newest':
+        return Date.parse(b.createdAt) - Date.parse(a.createdAt);
+      case 'rating':
+        return b.rating.average - a.rating.average || b.rating.count - a.rating.count;
+      case 'featured':
+      default:
+        return (
+          b.purchaseCount - a.purchaseCount ||
+          Date.parse(b.createdAt) - Date.parse(a.createdAt)
+        );
+    }
+  });
 }
 
 export async function getProduct(id: string): Promise<Product | undefined> {
