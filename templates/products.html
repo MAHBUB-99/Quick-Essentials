@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Products - FarmFresh</title>
+        <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+            rel="stylesheet"
+        />
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script>
+            tailwind.config = {
+                darkMode: "class",
+                theme: {
+                    extend: {
+                        colors: {
+                            primary: {
+                                50: "#f0fdf4",
+                                100: "#dcfce7",
+                                500: "#22c55e",
+                                600: "#16a34a",
+                                700: "#15803d",
+                                800: "#166534",
+                                900: "#14532d",
+                            },
+                        },
+                    },
+                },
+            };
+        </script>
+    </head>
+    <body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+        <!-- Navigation -->
+        <nav class="bg-white dark:bg-gray-800 shadow-lg sticky top-0 z-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-16">
+                    <!-- Logo -->
+                    <div class="flex items-center space-x-3">
+                        <a
+                            href="index.html"
+                            class="flex items-center space-x-3"
+                        >
+                            <div class="bg-primary-500 p-2 rounded-lg">
+                                <i
+                                    class="fas fa-seedling text-white text-xl"
+                                ></i>
+                            </div>
+                            <div>
+                                <h1
+                                    class="text-xl font-bold text-gray-900 dark:text-white"
+                                >
+                                    FarmFresh
+                                </h1>
+                                <p
+                                    class="text-xs text-gray-500 dark:text-gray-400"
+                                >
+                                    Local Farmer Booking
+                                </p>
+                            </div>
+                        </a>
+                    </div>
+
+                    <!-- Desktop Navigation -->
+                    <div class="hidden md:flex items-center space-x-8">
+                        <a
+                            href="index.html"
+                            class="text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition"
+                            >Home</a
+                        >
+                        <a
+                            href="products.html"
+                            class="text-primary-600 dark:text-primary-400 font-medium"
+                            >Products</a
+                        >
+                        <a
+                            href="farmers.html"
+                            class="text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition"
+                            >Farmers</a
+                        >
+                        <a
+                            href="about.html"
+                            class="text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition"
+                            >About</a
+                        >
+                    </div>
+
+                    <!-- User Actions -->
+                    <div class="flex items-center space-x-4">
+                        <!-- Search -->
+                        <div class="hidden sm:block relative">
+                            <input
+                                type="text"
+                                placeholder="Search products..."
+                                class="w-64 pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                            />
+                            <i
+                                class="fas fa-search absolute left-3 top-3 text-gray-400"
+                            ></i>
+                        </div>
+
+                        <!-- Cart -->
+                        <button
+                            class="relative p-2 text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400"
+                        >
+                            <i class="fas fa-shopping-cart text-xl"></i>
+                            <span
+                                class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center"
+                                >3</span
+                            >
+                        </button>
+
+                        <!-- User Menu -->
+                        <div class="relative">
+                            <button
+                                class="flex items-center space-x-2 text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400"
+                            >
+                                <img
+                                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face"
+                                    alt="User"
+                                    class="w-8 h-8 rounded-full"
+                                />
+                                <span class="hidden sm:block">John Doe</span>
+                                <i class="fas fa-chevron-down text-sm"></i>
+                            </button>
+                        </div>
+
+                        <!-- Dark Mode Toggle -->
+                        <button
+                            id="darkToggle"
+                            class="p-2 text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400"
+                        >
+                            <i class="fas fa-moon dark:hidden"></i>
+                            <i class="fas fa-sun hidden dark:block"></i>
+                        </button>
+
+                        <!-- Mobile Menu Button -->
+                        <button
+                            class="md:hidden p-2 text-gray-700 dark:text-gray-300"
+                        >
+                            <i class="fas fa-bars"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Page Header -->
+        <div class="bg-primary-600 text-white py-12">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h1 class="text-4xl font-bold mb-4">Fresh Products</h1>
+                <p class="text-xl text-primary-100">
+                    Discover fresh, locally-sourced produce from our trusted
+                    farmers
+                </p>
+            </div>
+        </div>
+
+        <!-- Filters and Products -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+                <!-- Filters Sidebar -->
+                <div class="lg:col-span-1">
+                    <div
+                        class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 sticky top-24"
+                    >
+                        <h3
+                            class="text-lg font-semibold text-gray-900 dark:text-white mb-4"
+                        >
+                            Filters
+                        </h3>
+
+                        <!-- Category Filter -->
+                        <div class="mb-6">
+                            <h4
+                                class="font-medium text-gray-900 dark:text-white mb-3"
+                            >
+                                Category
+                            </h4>
+                            <div class="space-y-2">
+                                <label class="flex items-center">
+                                    <input
+                                        type="checkbox"
+                                        class="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+                                    />
+                                    <span
+                                        class="ml-2 text-sm text-gray-700 dark:text-gray-300"
+                                        >Vegetables (45)</span
+                                    >
+                                </label>
+                                <label class="flex items-center">
+                                    <input
+                                        type="checkbox"
+                                        class="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+                                    />
+                                    <span
+                                        class="ml-2 text-sm text-gray-700 dark:text-gray-300"
+                                        >Fruits (32)</span
+                                    >
+                                </label>
+                                <label class="flex items-center">
+                                    <input
+                                        type="checkbox"
+                                        class="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+                                    />
+                                    <span
+                                        class="ml-2 text-sm text-gray-700 dark:text-gray-300"
+                                        >Grains (18)</span
+                                    >
+                                </label>
+                                <label class="flex items-center">
+                                    <input
+                                        type="checkbox"
+                                        class="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+                                    />
+                                    <span
+                                        class="ml-2 text-sm text-gray-700 dark:text-gray-300"
+                                        >Dairy (12)</span
+                                    >
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Price Range -->
+                        <div class="mb-6">
+                            <h4
+                                class="font-medium text-gray-900 dark:text-white mb-3"
+                            >
+                                Price Range
+                            </h4>
+                            <div class="space-y-2">
+                                <label class="flex items-center">
+                                    <input
+                                        type="radio"
+                                        name="price"
+                                        class="border-gray-300 text-primary-600 focus:ring-primary-500"
+                                    />
+                                    <span
+                                        class="ml-2 text-sm text-gray-700 dark:text-gray-300"
+                                        >Under ৳30</span
+                                    >
+                                </label>
+                                <label class="flex items-center">
+                                    <input
+                                        type="radio"
+                                        name="price"
+                                        class="border-gray-300 text-primary-600 focus:ring-primary-500"
+                                    />
+                                    <span
+                                        class="ml-2 text-sm text-gray-700 dark:text-gray-300"
+                                        >৳30 - ৳50</span
+                                    >
+                                </label>
+                                <label class="flex items-center">
+                                    <input
+                                        type="radio"
+                                        name="price"
+                                        class="border-gray-300 text-primary-600 focus:ring-primary-500"
+                                    />
+                                    <span
+                                        class="ml-2 text-sm text-gray-700 dark:text-gray-300"
+                                        >৳50 - ৳100</span
+                                    >
+                                </label>
+                                <label class="flex items-center">
+                                    <input
+                                        type="radio"
+                                        name="price"
+                                        class="border-gray-300 text-primary-600 focus:ring-primary-500"
+                                    />
+                                    <span
+                                        class="ml-2 text-sm text-gray-700 dark:text-gray-300"
+                                        >Over ৳100</span
+                                    >
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Location -->
+                        <div class="mb-6">
+                            <h4
+                                class="font-medium text-gray-900 dark:text-white mb-3"
+                            >
+                                Location
+                            </h4>
+                            <select
+                                class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                            >
+                                <option>All Locations</option>
+                                <option>Dhaka</option>
+                                <option>Chittagong</option>
+                                <option>Sylhet</option>
+                                <option>Rangpur</option>
+                            </select>
+                        </div>
+
+                        <!-- Organic Filter -->
+                        <div class="mb-6">
+                            <label class="flex items-center">
+                                <input
+                                    type="checkbox"
+                                    class="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+                                />
+                                <span
+                                    class="ml-2 text-sm text-gray-700 dark:text-gray-300"
+                                    >Organic Only</span
+                                >
+                            </label>
+                        </div>
+
+                        <button
+                            class="w-full bg-primary-600 hover:bg-primary-700 text-white py-2 rounded-lg font-medium transition"
+                        >
+                            Apply Filters
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Products Grid -->
+                <div class="lg:col-span-3">
+                    <!-- Sort and View Options -->
+                    <div class="flex justify-between items-center mb-6">
+                        <p class="text-gray-600 dark:text-gray-400">
+                            Showing 1-12 of 48 products
+                        </p>
+                        <div class="flex items-center space-x-4">
+                            <select
+                                class="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                            >
+                                <option>Sort by: Featured</option>
+                                <option>Price: Low to High</option>
+                                <option>Price: High to Low</option>
+                                <option>Newest First</option>
+                                <option>Rating</option>
+                            </select>
+                            <div
+                                class="flex border border-gray-300 dark:border-gray-600 rounded-lg"
+                            >
+                                <button
+                                    class="p-2 bg-primary-600 text-white rounded-l-lg"
+                                >
+                                    <i class="fas fa-th"></i>
+                                </button>
+                                <button
+                                    class="p-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-r-lg"
+                                >
+                                    <i class="fas fa-list"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Products Grid -->
+                    <div
+                        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+                    >
+                        <!-- Product Card 1 -->
+                        <div
+                            class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden group hover:shadow-xl transition-all duration-300"
+                        >
+                            <div class="relative">
+                                <img
+                                    src="https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=400&h=300&fit=crop"
+                                    alt="Fresh Tomatoes"
+                                    class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                                />
+                                <div class="absolute top-3 left-3">
+                                    <span
+                                        class="bg-green-500 text-white px-2 py-1 rounded-full text-xs font-medium"
+                                        >Organic</span
+                                    >
+                                </div>
+                                <div class="absolute top-3 right-3">
+                                    <button
+                                        class="bg-white dark:bg-gray-800 p-2 rounded-full shadow-md hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+                                    >
+                                        <i
+                                            class="far fa-heart text-gray-600 dark:text-gray-400"
+                                        ></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="p-6">
+                                <div
+                                    class="flex items-center justify-between mb-2"
+                                >
+                                    <h3
+                                        class="font-semibold text-gray-900 dark:text-white"
+                                    >
+                                        Fresh Tomatoes
+                                    </h3>
+                                    <div
+                                        class="flex items-center text-yellow-400"
+                                    >
+                                        <i class="fas fa-star text-sm"></i>
+                                        <span
+                                            class="text-sm text-gray-600 dark:text-gray-400 ml-1"
+                                            >4.8</span
+                                        >
+                                    </div>
+                                </div>
+                                <p
+                                    class="text-sm text-gray-600 dark:text-gray-400 mb-3"
+                                >
+                                    By Rahim's Farm • Sylhet
+                                </p>
+                                <div
+                                    class="flex items-center justify-between mb-4"
+                                >
+                                    <div>
+                                        <span
+                                            class="text-2xl font-bold text-primary-600 dark:text-primary-400"
+                                            >৳45</span
+                                        >
+                                        <span
+                                            class="text-sm text-gray-500 dark:text-gray-400"
+                                            >/kg</span
+                                        >
+                                    </div>
+                                    <span
+                                        class="text-sm text-gray-500 dark:text-gray-400"
+                                        >Stock: 50kg</span
+                                    >
+                                </div>
+                                <button
+                                    class="w-full bg-primary-600 hover:bg-primary-700 text-white py-2 rounded-lg font-medium transition"
+                                >
+                                    Add to Cart
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Product Card 2 -->
+                        <div
+                            class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden group hover:shadow-xl transition-all duration-300"
+                        >
+                            <div class="relative">
+                                <img
+                                    src="https://images.unsplash.com/photo-1619566636858-adf3ef46400b?w=400&h=300&fit=crop"
+                                    alt="Fresh Carrots"
+                                    class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                                />
+                                <div class="absolute top-3 right-3">
+                                    <button
+                                        class="bg-white dark:bg-gray-800 p-2 rounded-full shadow-md hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+                                    >
+                                        <i
+                                            class="far fa-heart text-gray-600 dark:text-gray-400"
+                                        ></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="p-6">
+                                <div
+                                    class="flex items-center justify-between mb-2"
+                                >
+                                    <h3
+                                        class="font-semibold text-gray-900 dark:text-white"
+                                    >
+                                        Fresh Carrots
+                                    </h3>
+                                    <div
+                                        class="flex items-center text-yellow-400"
+                                    >
+                                        <i class="fas fa-star text-sm"></i>
+                                        <span
+                                            class="text-sm text-gray-600 dark:text-gray-400 ml-1"
+                                            >4.9</span
+                                        >
+                                    </div>
+                                </div>
+                                <p
+                                    class="text-sm text-gray-600 dark:text-gray-400 mb-3"
+                                >
+                                    By Shumi's Garden • Rangpur
+                                </p>
+                                <div
+                                    class="flex items-center justify-between mb-4"
+                                >
+                                    <div>
+                                        <span
+                                            class="text-2xl font-bold text-primary-600 dark:text-primary-400"
+                                            >৳35</span
+                                        >
+                                        <span
+                                            class="text-sm text-gray-500 dark:text-gray-400"
+                                            >/kg</span
+                                        >
+                                    </div>
+                                    <span
+                                        class="text-sm text-gray-500 dark:text-gray-400"
+                                        >Stock: 30kg</span
+                                    >
+                                </div>
+                                <button
+                                    class="w-full bg-primary-600 hover:bg-primary-700 text-white py-2 rounded-lg font-medium transition"
+                                >
+                                    Add to Cart
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Product Card 3 -->
+                        <div
+                            class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden group hover:shadow-xl transition-all duration-300"
+                        >
+                            <div class="relative">
+                                <img
+                                    src="https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?w=400&h=300&fit=crop"
+                                    alt="Fresh Spinach"
+                                    class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                                />
+                                <div class="absolute top-3 left-3">
+                                    <span
+                                        class="bg-green-500 text-white px-2 py-1 rounded-full text-xs font-medium"
+                                        >Organic</span
+                                    >
+                                </div>
+                                <div class="absolute top-3 right-3">
+                                    <button
+                                        class="bg-white dark:bg-gray-800 p-2 rounded-full shadow-md hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+                                    >
+                                        <i
+                                            class="fas fa-heart text-red-500"
+                                        ></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="p-6">
+                                <div
+                                    class="flex items-center justify-between mb-2"
+                                >
+                                    <h3
+                                        class="font-semibold text-gray-900 dark:text-white"
+                                    >
+                                        Fresh Spinach
+                                    </h3>
+                                    <div
+                                        class="flex items-center text-yellow-400"
+                                    >
+                                        <i class="fas fa-star text-sm"></i>
+                                        <span
+                                            class="text-sm text-gray-600 dark:text-gray-400 ml-1"
+                                            >4.7</span
+                                        >
+                                    </div>
+                                </div>
+                                <p
+                                    class="text-sm text-gray-600 dark:text-gray-400 mb-3"
+                                >
+                                    By Sakib's Organics • Dhaka
+                                </p>
+                                <div
+                                    class="flex items-center justify-between mb-4"
+                                >
+                                    <div>
+                                        <span
+                                            class="text-2xl font-bold text-primary-600 dark:text-primary-400"
+                                            >৳25</span
+                                        >
+                                        <span
+                                            class="text-sm text-gray-500 dark:text-gray-400"
+                                            >/kg</span
+                                        >
+                                    </div>
+                                    <span
+                                        class="text-sm text-gray-500 dark:text-gray-400"
+                                        >Stock: 20kg</span
+                                    >
+                                </div>
+                                <button
+                                    class="w-full bg-primary-600 hover:bg-primary-700 text-white py-2 rounded-lg font-medium transition"
+                                >
+                                    Add to Cart
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Product Card 4 -->
+                        <div
+                            class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden group hover:shadow-xl transition-all duration-300"
+                        >
+                            <div class="relative">
+                                <img
+                                    src="https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=400&h=300&fit=crop"
+                                    alt="Fresh Broccoli"
+                                    class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                                />
+                                <div class="absolute top-3 right-3">
+                                    <button
+                                        class="bg-white dark:bg-gray-800 p-2 rounded-full shadow-md hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+                                    >
+                                        <i
+                                            class="far fa-heart text-gray-600 dark:text-gray-400"
+                                        ></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="p-6">
+                                <div
+                                    class="flex items-center justify-between mb-2"
+                                >
+                                    <h3
+                                        class="font-semibold text-gray-900 dark:text-white"
+                                    >
+                                        Fresh Broccoli
+                                    </h3>
+                                    <div
+                                        class="flex items-center text-yellow-400"
+                                    >
+                                        <i class="fas fa-star text-sm"></i>
+                                        <span
+                                            class="text-sm text-gray-600 dark:text-gray-400 ml-1"
+                                            >4.6</span
+                                        >
+                                    </div>
+                                </div>
+                                <p
+                                    class="text-sm text-gray-600 dark:text-gray-400 mb-3"
+                                >
+                                    By Anika's Garden • Chittagong
+                                </p>
+                                <div
+                                    class="flex items-center justify-between mb-4"
+                                >
+                                    <div>
+                                        <span
+                                            class="text-2xl font-bold text-primary-600 dark:text-primary-400"
+                                            >৳55</span
+                                        >
+                                        <span
+                                            class="text-sm text-gray-500 dark:text-gray-400"
+                                            >/kg</span
+                                        >
+                                    </div>
+                                    <span
+                                        class="text-sm text-gray-500 dark:text-gray-400"
+                                        >Stock: 15kg</span
+                                    >
+                                </div>
+                                <button
+                                    class="w-full bg-primary-600 hover:bg-primary-700 text-white py-2 rounded-lg font-medium transition"
+                                >
+                                    Add to Cart
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Product Card 5 -->
+                        <div
+                            class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden group hover:shadow-xl transition-all duration-300"
+                        >
+                            <div class="relative">
+                                <img
+                                    src="https://images.unsplash.com/photo-1566385101042-1a0aa0c1268c?w=400&h=300&fit=crop"
+                                    alt="Fresh Lettuce"
+                                    class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                                />
+                                <div class="absolute top-3 left-3">
+                                    <span
+                                        class="bg-green-500 text-white px-2 py-1 rounded-full text-xs font-medium"
+                                        >Organic</span
+                                    >
+                                </div>
+                                <div class="absolute top-3 right-3">
+                                    <button
+                                        class="bg-white dark:bg-gray-800 p-2 rounded-full shadow-md hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+                                    >
+                                        <i
+                                            class="far fa-heart text-gray-600 dark:text-gray-400"
+                                        ></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="p-6">
+                                <div
+                                    class="flex items-center justify-between mb-2"
+                                >
+                                    <h3
+                                        class="font-semibold text-gray-900 dark:text-white"
+                                    >
+                                        Fresh Lettuce
+                                    </h3>
+                                    <div
+                                        class="flex items-center text-yellow-400"
+                                    >
+                                        <i class="fas fa-star text-sm"></i>
+                                        <span
+                                            class="text-sm text-gray-600 dark:text-gray-400 ml-1"
+                                            >4.5</span
+                                        >
+                                    </div>
+                                </div>
+                                <p
+                                    class="text-sm text-gray-600 dark:text-gray-400 mb-3"
+                                >
+                                    By Green Valley Farm • Sylhet
+                                </p>
+                                <div
+                                    class="flex items-center justify-between mb-4"
+                                >
+                                    <div>
+                                        <span
+                                            class="text-2xl font-bold text-primary-600 dark:text-primary-400"
+                                            >৳30</span
+                                        >
+                                        <span
+                                            class="text-sm text-gray-500 dark:text-gray-400"
+                                            >/kg</span
+                                        >
+                                    </div>
+                                    <span
+                                        class="text-sm text-gray-500 dark:text-gray-400"
+                                        >Stock: 25kg</span
+                                    >
+                                </div>
+                                <button
+                                    class="w-full bg-primary-600 hover:bg-primary-700 text-white py-2 rounded-lg font-medium transition"
+                                >
+                                    Add to Cart
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Product Card 6 -->
+                        <div
+                            class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden group hover:shadow-xl transition-all duration-300"
+                        >
+                            <div class="relative">
+                                <img
+                                    src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=400&h=300&fit=crop"
+                                    alt="Fresh Cucumber"
+                                    class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                                />
+                                <div class="absolute top-3 right-3">
+                                    <button
+                                        class="bg-white dark:bg-gray-800 p-2 rounded-full shadow-md hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+                                    >
+                                        <i
+                                            class="far fa-heart text-gray-600 dark:text-gray-400"
+                                        ></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="p-6">
+                                <div
+                                    class="flex items-center justify-between mb-2"
+                                >
+                                    <h3
+                                        class="font-semibold text-gray-900 dark:text-white"
+                                    >
+                                        Fresh Cucumber
+                                    </h3>
+                                    <div
+                                        class="flex items-center text-yellow-400"
+                                    >
+                                        <i class="fas fa-star text-sm"></i>
+                                        <span
+                                            class="text-sm text-gray-600 dark:text-gray-400 ml-1"
+                                            >4.4</span
+                                        >
+                                    </div>
+                                </div>
+                                <p
+                                    class="text-sm text-gray-600 dark:text-gray-400 mb-3"
+                                >
+                                    By Fresh Fields • Dhaka
+                                </p>
+                                <div
+                                    class="flex items-center justify-between mb-4"
+                                >
+                                    <div>
+                                        <span
+                                            class="text-2xl font-bold text-primary-600 dark:text-primary-400"
+                                            >৳20</span
+                                        >
+                                        <span
+                                            class="text-sm text-gray-500 dark:text-gray-400"
+                                            >/kg</span
+                                        >
+                                    </div>
+                                    <span
+                                        class="text-sm text-gray-500 dark:text-gray-400"
+                                        >Stock: 40kg</span
+                                    >
+                                </div>
+                                <button
+                                    class="w-full bg-primary-600 hover:bg-primary-700 text-white py-2 rounded-lg font-medium transition"
+                                >
+                                    Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div class="flex justify-center mt-12">
+                        <nav aria-label="Pagination">
+                            <ul
+                                class="inline-flex items-center -space-x-px text-gray-600 dark:text-gray-300"
+                            >
+                                <li>
+                                    <a
+                                        href="#"
+                                        class="block px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                                    >
+                                        <i class="fas fa-chevron-left"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a
+                                        href="#"
+                                        class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                                        >1</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="#"
+                                        class="px-3 py-2 leading-tight text-white bg-primary-600 border border-primary-600 hover:bg-primary-700 hover:text-white"
+                                        >2</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="#"
+                                        class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                                        >3</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="#"
+                                        class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                                        >4</a
+                                    >
+                                </li>
+                                <li>
+                                    <a
+                                        href="#"
+                                        class="block px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                                    >
+                                        <i class="fas fa-chevron-right"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="bg-gray-900 text-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                    <div>
+                        <div class="flex items-center space-x-3 mb-4">
+                            <div class="bg-primary-500 p-2 rounded-lg">
+                                <i
+                                    class="fas fa-seedling text-white text-xl"
+                                ></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold">FarmFresh</h3>
+                                <p class="text-sm text-gray-400">
+                                    Local Farmer Booking
+                                </p>
+                            </div>
+                        </div>
+                        <p class="text-gray-400 mb-4">
+                            Connecting communities with fresh, local produce
+                            directly from farmers.
+                        </p>
+                        <div class="flex space-x-4">
+                            <a href="#" class="text-gray-400 hover:text-white"
+                                ><i class="fab fa-facebook"></i
+                            ></a>
+                            <a href="#" class="text-gray-400 hover:text-white"
+                                ><i class="fab fa-twitter"></i
+                            ></a>
+                            <a href="#" class="text-gray-400 hover:text-white"
+                                ><i class="fab fa-instagram"></i
+                            ></a>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h4 class="font-semibold mb-4">Quick Links</h4>
+                        <ul class="space-y-2 text-gray-400">
+                            <li>
+                                <a href="index.html" class="hover:text-white"
+                                    >Home</a
+                                >
+                            </li>
+                            <li>
+                                <a href="products.html" class="hover:text-white"
+                                    >Products</a
+                                >
+                            </li>
+                            <li>
+                                <a href="farmers.html" class="hover:text-white"
+                                    >Farmers</a
+                                >
+                            </li>
+                            <li>
+                                <a href="about.html" class="hover:text-white"
+                                    >About Us</a
+                                >
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h4 class="font-semibold mb-4">For Farmers</h4>
+                        <ul class="space-y-2 text-gray-400">
+                            <li>
+                                <a href="register.html" class="hover:text-white"
+                                    >Join as Farmer</a
+                                >
+                            </li>
+                            <li>
+                                <a href="create.html" class="hover:text-white"
+                                    >Add Products</a
+                                >
+                            </li>
+                            <li>
+                                <a
+                                    href="manageList.html"
+                                    class="hover:text-white"
+                                    >Manage Listings</a
+                                >
+                            </li>
+                            <li>
+                                <a href="#" class="hover:text-white"
+                                    >Farmer Support</a
+                                >
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h4 class="font-semibold mb-4">Support</h4>
+                        <ul class="space-y-2 text-gray-400">
+                            <li>
+                                <a href="#" class="hover:text-white"
+                                    >Help Center</a
+                                >
+                            </li>
+                            <li>
+                                <a href="#" class="hover:text-white"
+                                    >Contact Us</a
+                                >
+                            </li>
+                            <li>
+                                <a href="#" class="hover:text-white"
+                                    >Terms of Service</a
+                                >
+                            </li>
+                            <li>
+                                <a href="#" class="hover:text-white"
+                                    >Privacy Policy</a
+                                >
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div
+                    class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400"
+                >
+                    <p>
+                        &copy; 2025 FarmFresh - Local Farmer Booking. All rights
+                        reserved by LWS.
+                    </p>
+                </div>
+            </div>
+        </footer>
+
+        <script>
+            // Dark mode toggle
+            const darkToggle = document.getElementById("darkToggle");
+            const html = document.documentElement;
+
+            darkToggle.addEventListener("click", () => {
+                html.classList.toggle("dark");
+                localStorage.setItem(
+                    "theme",
+                    html.classList.contains("dark") ? "dark" : "light"
+                );
+            });
+
+            // Load saved theme
+            if (
+                localStorage.getItem("theme") === "dark" ||
+                (!localStorage.getItem("theme") &&
+                    window.matchMedia("(prefers-color-scheme: dark)").matches)
+            ) {
+                html.classList.add("dark");
+            }
+
+            // Product card click handlers
+            document
+                .querySelectorAll(".bg-white.dark\\:bg-gray-800")
+                .forEach((card) => {
+                    card.addEventListener("click", (e) => {
+                        if (!e.target.closest("button")) {
+                            window.location.href = "details.html";
+                        }
+                    });
+                });
+        </script>
+    </body>
+</html>
