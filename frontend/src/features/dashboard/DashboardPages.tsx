@@ -18,6 +18,7 @@ import {
 import type { CategorySlug, Product, ProductFeature, ProductUnit } from '@/types';
 import { formatCurrency } from '@/utils/format';
 import { useCategories } from './categories';
+import { useNotifications, type NotificationIcon } from './notifications';
 
 const listingSchema = z.object({
   name: z.string().min(3, 'Product name is required'),
@@ -361,6 +362,9 @@ export function ManageListingsPage() {
         </div>
         <div className="flex flex-wrap gap-3">
           <Button asChild variant="outline">
+            <Link to={ROUTES.dashboardNotifications}>Notifications</Link>
+          </Button>
+          <Button asChild variant="outline">
             <Link to={ROUTES.dashboardCategories}>Manage Categories</Link>
           </Button>
           <Button asChild>
@@ -613,6 +617,171 @@ export function ManageCategoriesPage() {
                       </Button>
                     </div>
                   </>
+                )}
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+    </div>
+  );
+}
+
+const NOTIFICATION_ICONS: Array<[NotificationIcon, string]> = [
+  ['info', 'Information'],
+  ['truck', 'Delivery'],
+  ['bolt', 'Offer'],
+  ['leaf', 'Fresh produce'],
+  ['shield', 'Security'],
+];
+
+export function ManageNotificationsPage() {
+  const { notifications, addNotification, updateNotification, deleteNotification } =
+    useNotifications();
+  const [message, setMessage] = useState('');
+  const [icon, setIcon] = useState<NotificationIcon>('info');
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editingMessage, setEditingMessage] = useState('');
+  const [editingIcon, setEditingIcon] = useState<NotificationIcon>('info');
+
+  const submitNotification = (event: FormEvent) => {
+    event.preventDefault();
+    if (!message.trim()) return;
+    addNotification(message, icon);
+    setMessage('');
+    setIcon('info');
+  };
+
+  const startEditingNotification = (id: string, currentMessage: string, currentIcon: NotificationIcon) => {
+    setEditingId(id);
+    setEditingMessage(currentMessage);
+    setEditingIcon(currentIcon);
+  };
+
+  const submitEdit = (event: FormEvent) => {
+    event.preventDefault();
+    if (!editingId || !editingMessage.trim()) return;
+    updateNotification(editingId, { message: editingMessage.trim(), icon: editingIcon });
+    setEditingId(null);
+  };
+
+  return (
+    <div className="mx-auto w-full max-w-5xl px-4 py-8">
+      <nav className="mb-4 text-sm text-gray-500">
+        <Link to={ROUTES.dashboardProducts}>Admin Dashboard</Link> / Notifications
+      </nav>
+      <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+        <div>
+          <h1 className="text-3xl font-bold">Notification Settings</h1>
+          <p className="mt-1 text-gray-600 dark:text-gray-400">
+            Manage the messages shown in the sliding bar on the Products page.
+          </p>
+        </div>
+        <Button asChild variant="outline">
+          <Link to={ROUTES.dashboardProducts}>Back to Products</Link>
+        </Button>
+      </div>
+
+      <form
+        onSubmit={submitNotification}
+        className="mt-6 grid gap-3 rounded-2xl bg-white p-5 shadow-lg dark:bg-gray-800 sm:grid-cols-[10rem_1fr_auto] sm:items-end"
+      >
+        <SelectField
+          id="new-notification-icon"
+          label="Icon"
+          value={icon}
+          onChange={(event) => setIcon(event.target.value as NotificationIcon)}
+        >
+          {NOTIFICATION_ICONS.map(([value, label]) => <option key={value} value={value}>{label}</option>)}
+        </SelectField>
+        <Field
+          id="new-notification-message"
+          label="Notification message"
+          value={message}
+          onChange={(event) => setMessage(event.target.value)}
+          placeholder="For example: Free delivery this weekend"
+          maxLength={120}
+        />
+        <Button type="submit" disabled={!message.trim()}>
+          <Icon name="plus" /> Add Notification
+        </Button>
+      </form>
+
+      <section className="mt-6 overflow-hidden rounded-2xl bg-white shadow-lg dark:bg-gray-800">
+        <div className="flex items-center justify-between border-b px-5 py-4 dark:border-gray-700">
+          <h2 className="font-semibold">Sliding Notifications ({notifications.length})</h2>
+          <span className="text-sm text-gray-500">
+            {notifications.filter((item) => item.enabled).length} active
+          </span>
+        </div>
+        {notifications.length === 0 ? (
+          <p className="p-10 text-center text-gray-500">No notifications yet. Add one above.</p>
+        ) : (
+          <ul className="divide-y dark:divide-gray-700">
+            {notifications.map((notification) => (
+              <li key={notification.id} className="px-5 py-4">
+                {editingId === notification.id ? (
+                  <form onSubmit={submitEdit} className="grid gap-3 sm:grid-cols-[10rem_1fr_auto_auto] sm:items-center">
+                    <select
+                      value={editingIcon}
+                      onChange={(event) => setEditingIcon(event.target.value as NotificationIcon)}
+                      aria-label="Notification icon"
+                      className="rounded-lg border border-emerald-200 bg-emerald-50/60 px-3 py-2 dark:border-gray-600 dark:bg-gray-700"
+                    >
+                      {NOTIFICATION_ICONS.map(([value, label]) => <option key={value} value={value}>{label}</option>)}
+                    </select>
+                    <input
+                      value={editingMessage}
+                      onChange={(event) => setEditingMessage(event.target.value)}
+                      aria-label="Notification message"
+                      maxLength={120}
+                      autoFocus
+                      className="rounded-lg border border-emerald-200 bg-emerald-50/60 px-3 py-2 dark:border-gray-600 dark:bg-gray-700"
+                    />
+                    <Button type="submit" size="sm" disabled={!editingMessage.trim()}>Save</Button>
+                    <Button type="button" size="sm" variant="outline" onClick={() => setEditingId(null)}>Cancel</Button>
+                  </form>
+                ) : (
+                  <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+                    <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${notification.enabled ? 'bg-primary-100 text-primary-700 dark:bg-primary-900 dark:text-primary-300' : 'bg-gray-100 text-gray-400 dark:bg-gray-700'}`}>
+                      <Icon name={notification.icon} />
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <p className={`font-medium ${notification.enabled ? '' : 'text-gray-400 line-through'}`}>{notification.message}</p>
+                      <p className="mt-0.5 text-xs text-gray-500">{notification.enabled ? 'Visible in sliding bar' : 'Hidden'}</p>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      <Button
+                        type="button"
+                        size="sm"
+                        variant="outline"
+                        onClick={() => updateNotification(notification.id, { enabled: !notification.enabled })}
+                      >
+                        <Icon name={notification.enabled ? 'eye' : 'eyeSlash'} />
+                        {notification.enabled ? 'Disable' : 'Enable'}
+                      </Button>
+                      <Button
+                        type="button"
+                        size="sm"
+                        variant="outline"
+                        onClick={() => startEditingNotification(notification.id, notification.message, notification.icon)}
+                      >
+                        <Icon name="edit" /> Edit
+                      </Button>
+                      <Button
+                        type="button"
+                        size="sm"
+                        variant="destructive"
+                        onClick={() => {
+                          if (window.confirm(`Are you sure you want to delete “${notification.message}”?`)) {
+                            deleteNotification(notification.id);
+                          }
+                        }}
+                      >
+                        <Icon name="trash" /> Delete
+                      </Button>
+                    </div>
+                  </div>
                 )}
               </li>
             ))}

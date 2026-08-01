@@ -17,7 +17,7 @@ const DEFAULT_CATEGORIES: AdminCategory[] = [
   { id: 'honey', name: 'Honey', slug: 'honey' },
 ];
 
-function loadCategories() {
+export function readCategories() {
   const saved = window.localStorage.getItem(STORAGE_KEY);
   if (!saved) return DEFAULT_CATEGORIES;
 
@@ -38,7 +38,7 @@ function makeSlug(name: string) {
 }
 
 export function useCategories() {
-  const [categories, setCategories] = useState<AdminCategory[]>(loadCategories);
+  const [categories, setCategories] = useState<AdminCategory[]>(readCategories);
 
   const save = (next: AdminCategory[]) => {
     setCategories(next);

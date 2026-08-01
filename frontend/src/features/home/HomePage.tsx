@@ -3,30 +3,26 @@ import { useSearchParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { ProductCard } from '@/components/cards/ProductCard';
 import { Icon } from '@/components/common/Icon';
-import { EmptyState, PageLoader } from '@/components/feedback/PageState';
+import { PageLoader } from '@/components/feedback/PageState';
 import { getProducts } from '@/services/api/marketplace';
 import type { CategorySlug, ProductSort } from '@/types';
+import { readNotifications } from '@/features/dashboard/notifications';
+import { readCategories } from '@/features/dashboard/categories';
+import type { IconName } from '@/lib/icons';
 
-const categories = [
-  [
-    'carrot',
-    'Vegetables',
-    'vegetables',
-    'Fresh & organic',
-    'bg-green-100 text-green-600 dark:bg-green-900',
-  ],
-  ['appleAlt', 'Fruits', 'fruits', 'Sweet & seasonal', 'bg-red-100 text-red-600 dark:bg-red-900'],
-  [
-    'seedling',
-    'Grains',
-    'grains',
-    'Everyday staples',
-    'bg-yellow-100 text-yellow-600 dark:bg-yellow-900',
-  ],
-  ['cheese', 'Dairy', 'dairy', 'Daily essentials', 'bg-blue-100 text-blue-600 dark:bg-blue-900'],
-  ['leaf', 'Herbs', 'herbs', 'Aromatic greens', 'bg-purple-100 text-purple-600 dark:bg-purple-900'],
-  ['jar', 'Honey', 'honey', 'Raw & natural', 'bg-orange-100 text-orange-600 dark:bg-orange-900'],
-] as const;
+const CATEGORY_STYLES: Record<string, { icon: IconName; color: string }> = {
+  vegetables: { icon: 'carrot', color: 'bg-green-100 text-green-600 dark:bg-green-900' },
+  fruits: { icon: 'appleAlt', color: 'bg-red-100 text-red-600 dark:bg-red-900' },
+  grains: { icon: 'seedling', color: 'bg-yellow-100 text-yellow-600 dark:bg-yellow-900' },
+  dairy: { icon: 'cheese', color: 'bg-blue-100 text-blue-600 dark:bg-blue-900' },
+  herbs: { icon: 'leaf', color: 'bg-purple-100 text-purple-600 dark:bg-purple-900' },
+  honey: { icon: 'jar', color: 'bg-orange-100 text-orange-600 dark:bg-orange-900' },
+};
+
+const FALLBACK_CATEGORY_STYLE = {
+  icon: 'leaf' as const,
+  color: 'bg-emerald-100 text-emerald-600 dark:bg-emerald-900',
+};
 
 export function HomePage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -37,6 +33,13 @@ export function HomePage() {
   const [priceMax, setPriceMax] = useState('');
   const [sort, setSort] = useState<ProductSort>('rating');
   const [filtersOpen, setFiltersOpen] = useState(false);
+  const [notifications] = useState(readNotifications);
+  const [adminCategories] = useState(readCategories);
+  const enabledNotifications = notifications.filter((notification) => notification.enabled);
+  const categories = adminCategories.map((category) => {
+    const style = CATEGORY_STYLES[category.slug] ?? FALLBACK_CATEGORY_STYLE;
+    return [style.icon, category.name, category.slug as CategorySlug, '', style.color] as const;
+  });
   const products = useQuery({
     queryKey: [
       'products',
@@ -159,29 +162,18 @@ export function HomePage() {
         role="region"
         aria-label="Current offers and notices"
       >
-        <span className="sr-only">
-          Free delivery on orders over one thousand taka. Ten percent off your first order. Fresh
-          arrivals every morning.
-        </span>
+        <span className="sr-only">{enabledNotifications.map((item) => item.message).join('. ')}</span>
         <div className="min-w-0 flex-1 overflow-hidden py-1.5">
           <div className="offer-ticker-track flex w-max items-center" aria-hidden="true">
             {[0, 1].map((group) => (
               <div key={group} className="flex shrink-0 items-center">
-                {[
-                  ['truck', 'Free delivery on orders over ৳1,000'],
-                  ['bolt', '10% off your first order'],
-                  ['leaf', 'Fresh arrivals every morning'],
-                  ['shield', 'Secure and reliable ordering'],
-                ].map(([icon, message]) => (
+                {enabledNotifications.map((notification) => (
                   <span
-                    key={`${group}-${message}`}
+                    key={`${group}-${notification.id}`}
                     className="flex items-center gap-2 px-7 text-xs font-semibold sm:text-sm"
                   >
-                    <Icon
-                      name={icon as 'truck' | 'bolt' | 'leaf' | 'shield'}
-                      className="text-primary-400"
-                    />
-                    {message}
+                    <Icon name={notification.icon} className="text-primary-400" />
+                    {notification.message}
                     <span className="ml-5 text-primary-500">●</span>
                   </span>
                 ))}
@@ -209,7 +201,7 @@ export function HomePage() {
             <button
               type="button"
               onClick={resetFilters}
-              className="flex h-8 items-center gap-1.5 rounded-lg border border-gray-700 bg-gray-900 px-2.5 text-xs font-semibold text-gray-200 transition hover:border-red-500/70 hover:bg-red-950/60 hover:text-red-200 focus-visible:ring-1 focus-visible:ring-red-500 sm:px-3"
+              className="flex h-8 items-center gap-1.5 rounded-lg border border-gray-700 bg-gray-900 px-2.5 text-xs font-semibold text-gray-200 transition hover:border-red-500/70 hover:bg-red-950/60 hover:text-red-200 focus-visible:ring-1 focus-visible:ring-red-500 sm:px-3 lg:hidden"
               aria-label="Clear all filters and sorting"
             >
               <Icon name="times" className="text-[11px]" />
@@ -343,10 +335,59 @@ export function HomePage() {
                 ))}
               </div>
             ) : (
-              <EmptyState
-                title="No products found"
-                message="Try another search or change the selected filters."
-              />
+              <div className="relative isolate flex min-h-[24rem] items-center justify-center overflow-hidden rounded-3xl border border-emerald-700/40 bg-gradient-to-br from-gray-900 via-emerald-950 to-gray-950 px-6 py-12 text-center shadow-xl shadow-emerald-950/20">
+                <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+                  <div className="absolute -left-24 -top-24 h-72 w-72 rounded-full bg-emerald-500/15 blur-3xl" />
+                  <div className="absolute -bottom-28 -right-16 h-80 w-80 rounded-full bg-lime-500/10 blur-3xl" />
+                  <div
+                    className="absolute inset-0 opacity-[0.055]"
+                    style={{
+                      backgroundImage:
+                        'linear-gradient(to right, #34d399 1px, transparent 1px), linear-gradient(to bottom, #34d399 1px, transparent 1px)',
+                      backgroundSize: '38px 38px',
+                    }}
+                  />
+                  <svg
+                    viewBox="0 0 230 270"
+                    className="absolute -bottom-14 -left-10 w-52 -rotate-6 text-emerald-400/[0.16] sm:w-64"
+                    fill="none"
+                  >
+                    <path d="M112 270C110 194 116 122 143 44" stroke="currentColor" strokeWidth="8" />
+                    <path d="M136 78C82 78 52 51 53 9C105 8 138 34 136 78Z" fill="currentColor" />
+                    <path d="M121 137C66 136 34 109 32 66C86 64 120 90 121 137Z" fill="currentColor" />
+                    <path d="M130 112C182 109 213 83 217 42C166 38 133 64 130 112Z" fill="currentColor" />
+                  </svg>
+                  <svg
+                    viewBox="0 0 220 190"
+                    className="absolute -bottom-8 -right-8 w-52 rotate-6 text-lime-300/[0.12] sm:w-64"
+                    fill="none"
+                  >
+                    <path d="M35 71H185L169 168H51L35 71Z" stroke="currentColor" strokeWidth="8" strokeLinejoin="round" />
+                    <path d="M67 74C67 35 86 18 110 18C134 18 153 35 153 74" stroke="currentColor" strokeWidth="8" strokeLinecap="round" />
+                    <path d="M77 102H143M70 130H150" stroke="currentColor" strokeWidth="6" strokeLinecap="round" />
+                  </svg>
+                  <div className="absolute left-1/2 top-1/2 h-64 w-64 -translate-x-1/2 -translate-y-1/2 rounded-full border border-emerald-400/10" />
+                  <div className="absolute left-1/2 top-1/2 h-48 w-48 -translate-x-1/2 -translate-y-1/2 rounded-full border border-emerald-400/10" />
+                </div>
+
+                <div className="relative z-10 max-w-md">
+                  <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl border border-emerald-400/30 bg-emerald-900/70 text-3xl text-emerald-300 shadow-lg shadow-emerald-950/40 backdrop-blur">
+                    <Icon name="boxOpen" />
+                  </span>
+                  <h2 className="mt-5 text-2xl font-bold text-white">No products found</h2>
+                  <p className="mt-2 text-sm leading-6 text-emerald-100/70 sm:text-base">
+                    We couldn’t find anything matching these filters. Try a broader selection to
+                    discover more fresh products.
+                  </p>
+                  <button
+                    type="button"
+                    onClick={resetFilters}
+                    className="mt-6 inline-flex items-center gap-2 rounded-xl bg-primary-500 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-primary-950/30 transition hover:-translate-y-0.5 hover:bg-primary-600"
+                  >
+                    <Icon name="redo" /> Reset filters
+                  </button>
+                </div>
+              </div>
             )}
           </div>
         </div>

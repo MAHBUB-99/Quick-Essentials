@@ -66,6 +66,11 @@ const EditListingPage = lazy(() =>
     default: module.EditListingPage,
   })),
 );
+const ManageNotificationsPage = lazy(() =>
+  import('@/features/dashboard/DashboardPages').then((module) => ({
+    default: module.ManageNotificationsPage,
+  })),
+);
 
 function AdminRoute() {
   const isAdmin = window.sessionStorage.getItem('quickessentials-admin') === 'true';
@@ -96,6 +101,7 @@ const router = createBrowserRouter([
           { path: ROUTES.dashboardProductNew, element: suspense(<CreateListingPage />) },
           { path: ROUTE_PATTERNS.dashboardProductEdit, element: suspense(<EditListingPage />) },
           { path: ROUTES.dashboardCategories, element: suspense(<ManageCategoriesPage />) },
+          { path: ROUTES.dashboardNotifications, element: suspense(<ManageNotificationsPage />) },
         ],
       },
       { path: ROUTES.unauthorized, element: <UnauthorizedPage /> },
