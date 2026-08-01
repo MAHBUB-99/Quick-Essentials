@@ -19,6 +19,7 @@ export const ROUTES = {
   dashboardProducts: '/dashboard/products',
   dashboardProductNew: '/dashboard/products/new',
   dashboardProductEdit: (id: string | number = ':id') => `/dashboard/products/${id}/edit`,
+  dashboardCategories: '/dashboard/categories',
   unauthorized: '/unauthorized',
 } as const;
 

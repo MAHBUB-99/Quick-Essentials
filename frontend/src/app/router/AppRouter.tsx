@@ -1,5 +1,5 @@
 import { lazy, Suspense } from 'react';
-import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, Navigate, Outlet, RouterProvider } from 'react-router-dom';
 import { MarketplaceLayout } from '@/app/layouts/MarketplaceLayout';
 import { PageLoader } from '@/components/feedback/PageState';
 import { ROUTES, ROUTE_PATTERNS } from '@/constants/routes';
@@ -56,6 +56,21 @@ const ManageListingsPage = lazy(() =>
 const suspense = (element: React.ReactNode) => (
   <Suspense fallback={<PageLoader />}>{element}</Suspense>
 );
+const ManageCategoriesPage = lazy(() =>
+  import('@/features/dashboard/DashboardPages').then((module) => ({
+    default: module.ManageCategoriesPage,
+  })),
+);
+const EditListingPage = lazy(() =>
+  import('@/features/dashboard/DashboardPages').then((module) => ({
+    default: module.EditListingPage,
+  })),
+);
+
+function AdminRoute() {
+  const isAdmin = window.sessionStorage.getItem('quickessentials-admin') === 'true';
+  return isAdmin ? <Outlet /> : <Navigate to={ROUTES.login} replace />;
+}
 
 const router = createBrowserRouter([
   {
@@ -74,8 +89,15 @@ const router = createBrowserRouter([
       { path: ROUTES.orderSuccess, element: suspense(<PaymentSuccessPage />) },
       { path: ROUTES.orders, element: suspense(<OrdersPage />) },
       { path: `${ROUTES.orders}/:id/review`, element: suspense(<ReviewPage />) },
-      { path: ROUTES.dashboardProducts, element: suspense(<ManageListingsPage />) },
-      { path: ROUTES.dashboardProductNew, element: suspense(<CreateListingPage />) },
+      {
+        element: <AdminRoute />,
+        children: [
+          { path: ROUTES.dashboardProducts, element: suspense(<ManageListingsPage />) },
+          { path: ROUTES.dashboardProductNew, element: suspense(<CreateListingPage />) },
+          { path: ROUTE_PATTERNS.dashboardProductEdit, element: suspense(<EditListingPage />) },
+          { path: ROUTES.dashboardCategories, element: suspense(<ManageCategoriesPage />) },
+        ],
+      },
       { path: ROUTES.unauthorized, element: <UnauthorizedPage /> },
       { path: '*', element: <NotFoundPage /> },
     ],

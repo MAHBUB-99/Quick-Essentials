@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 import { Button } from '@/components/common/Button';
 import { Field, SelectField, TextareaField } from '@/components/forms/Field';
@@ -15,9 +15,12 @@ const phoneSchema = z
 
 const loginSchema = z.object({
   phone: phoneSchema,
-  password: z.string().min(8, 'Use at least 8 characters'),
+  password: z.string().min(1, 'Enter your password'),
 });
 type LoginValues = z.infer<typeof loginSchema>;
+
+const ADMIN_PHONE = '01832498239';
+const ADMIN_PASSWORD = 'admin';
 
 function AuthBackdrop({ children }: { children: React.ReactNode }) {
   return (
@@ -118,23 +121,57 @@ function AuthShell({
 
 export function LoginPage() {
   const [done, setDone] = useState(false);
+  const [isAdminLogin, setIsAdminLogin] = useState(false);
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
+    reset,
+    setError,
     formState: { errors, isSubmitting },
   } = useForm<LoginValues>({ resolver: zodResolver(loginSchema) });
-  const submit = async () => {
+  const submit = async (values: LoginValues) => {
     await new Promise((resolve) => window.setTimeout(resolve, 500));
+
+    if (isAdminLogin) {
+      if (values.phone !== ADMIN_PHONE || values.password !== ADMIN_PASSWORD) {
+        setError('root', { message: 'The admin phone number or password is incorrect.' });
+        return;
+      }
+
+      window.sessionStorage.setItem('quickessentials-admin', 'true');
+      await navigate(ROUTES.dashboardProducts, { replace: true });
+      return;
+    }
+
     setDone(true);
   };
+
+  const toggleAdminLogin = () => {
+    setIsAdminLogin((current) => !current);
+    setDone(false);
+    reset();
+  };
   return (
-    <AuthShell title="Welcome Back" subtitle="Sign in to continue to QuickEssentials">
+    <AuthShell
+      title={isAdminLogin ? 'Admin Access' : 'Welcome Back'}
+      subtitle={
+        isAdminLogin
+          ? 'Sign in to manage products and inventory'
+          : 'Sign in to continue to QuickEssentials'
+      }
+    >
       {done && (
         <p className="mb-5 rounded-lg bg-green-100 p-3 text-green-800" role="status">
           Mock sign-in successful.
         </p>
       )}
       <form onSubmit={(event) => void handleSubmit(submit)(event)} className="space-y-5">
+        {errors.root && (
+          <p className="rounded-lg bg-red-100 p-3 text-sm text-red-800" role="alert">
+            {errors.root.message}
+          </p>
+        )}
         <Field
           id="login-phone"
           label="Phone number"
@@ -163,15 +200,34 @@ export function LoginPage() {
           </Link>
         </div>
         <Button type="submit" fullWidth size="lg" isLoading={isSubmitting}>
-          Sign In
+          {isAdminLogin ? 'Enter Admin Dashboard' : 'Sign In'}
         </Button>
       </form>
-      <p className="mt-6 text-center text-sm">
-        New to QuickEssentials?{' '}
-        <Link to={ROUTES.register} className="font-medium text-primary-600">
-          Create an account
-        </Link>
-      </p>
+      {isAdminLogin ? (
+        <button
+          type="button"
+          onClick={toggleAdminLogin}
+          className="mx-auto mt-6 block text-sm text-gray-500 transition hover:text-primary-600"
+        >
+          Return to customer sign in
+        </button>
+      ) : (
+        <div className="mt-6 flex items-center justify-between gap-4 text-sm">
+          <p>
+            New here?{' '}
+            <Link to={ROUTES.register} className="font-medium text-primary-600">
+              Create an account
+            </Link>
+          </p>
+          <button
+            type="button"
+            onClick={toggleAdminLogin}
+            className="text-xs text-gray-400 transition hover:text-primary-600 focus-visible:text-primary-600"
+          >
+            Staff access
+          </button>
+        </div>
+      )}
     </AuthShell>
   );
 }

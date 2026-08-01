@@ -193,7 +193,7 @@ export function HomePage() {
           <button
             type="button"
             onClick={() => setFiltersOpen(true)}
-            className="relative flex h-8 items-center gap-2 rounded-lg border border-primary-700/60 bg-emerald-950 px-2.5 text-xs font-semibold text-white transition hover:border-primary-500 hover:bg-primary-900 focus-visible:ring-1 focus-visible:ring-primary-500 sm:px-3 sm:text-sm"
+            className="relative flex h-8 items-center gap-2 rounded-lg border border-primary-700/60 bg-emerald-950 px-2.5 text-xs font-semibold text-white transition hover:border-primary-500 hover:bg-primary-900 focus-visible:ring-1 focus-visible:ring-primary-500 sm:px-3 sm:text-sm lg:hidden"
             aria-label={`Open filters${activeFilterCount ? `, ${activeFilterCount} active` : ''}`}
             aria-haspopup="dialog"
           >
@@ -236,48 +236,63 @@ export function HomePage() {
         </div>
       </div>
       <section className="bg-white/20 pb-16 pt-4 dark:bg-gray-900/45 dark:backdrop-blur-[1px]">
-        <div className="mx-auto max-w-[100rem] px-3 sm:px-5 lg:px-7">
-          <aside className="hidden">
-            <div className="flex items-center justify-between">
-              <h2 className="text-lg font-bold">Filters</h2>
-              {hasFilters && (
-                <button
-                  type="button"
-                  onClick={() => {
-                    setSearchParams({});
-                    setSelectedCategories([]);
-                    setOrganicOnly(false);
-                    setPriceMin('');
-                    setPriceMax('');
-                    setSort('rating');
-                  }}
-                  className="text-xs font-medium text-primary-600 hover:text-primary-700"
-                >
-                  Reset
-                </button>
-              )}
+        <div className="mx-auto grid max-w-[100rem] items-start gap-4 px-3 sm:px-5 lg:grid-cols-[13.5rem_minmax(0,1fr)] lg:px-7">
+          <aside className="sticky top-2 hidden overflow-hidden rounded-2xl border border-emerald-200/80 bg-white/85 shadow-lg shadow-emerald-950/5 backdrop-blur-md dark:border-emerald-900/60 dark:bg-gray-900/85 lg:block">
+            <div className="flex items-center justify-between border-b border-emerald-100 px-4 py-3 dark:border-gray-700">
+              <div className="flex items-center gap-2">
+                <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary-100 text-primary-700 dark:bg-primary-900 dark:text-primary-300">
+                  <Icon name="filter" className="text-xs" />
+                </span>
+                <h2 className="text-sm font-bold">Filters</h2>
+              </div>
+              <div className="flex items-center gap-2">
+                {activeFilterCount > 0 && (
+                  <span className="rounded-full bg-primary-600 px-2 py-0.5 text-[10px] font-bold text-white">
+                    {activeFilterCount}
+                  </span>
+                )}
+                {hasFilters && (
+                  <button
+                    type="button"
+                    onClick={resetFilters}
+                    className="text-[11px] font-semibold text-primary-600 transition hover:text-primary-700 dark:text-primary-400"
+                  >
+                    Clear
+                  </button>
+                )}
+              </div>
             </div>
-
-            <fieldset className="mt-6">
-              <legend className="mb-3 text-sm font-semibold">Categories</legend>
-              <div className="space-y-2.5">
-                {categories.map(([, title, slug]) => (
-                  <label key={slug} className="flex cursor-pointer items-center gap-2.5 text-sm">
+            <div className="p-3.5">
+            <fieldset>
+              <legend className="mb-2 text-xs font-bold uppercase tracking-wide text-gray-500">Categories</legend>
+              <div className="space-y-1.5">
+                {categories.map(([icon, title, slug, , color]) => (
+                  <label
+                    key={slug}
+                    className={`flex cursor-pointer items-center gap-2 rounded-lg border px-2 py-1.5 text-xs font-semibold transition ${
+                      selectedCategories.includes(slug)
+                        ? 'border-primary-500 bg-primary-50 text-primary-800 dark:bg-primary-950/70 dark:text-primary-200'
+                        : 'border-transparent hover:border-emerald-200 hover:bg-emerald-50/70 dark:hover:border-gray-700 dark:hover:bg-gray-800'
+                    }`}
+                  >
                     <input
                       type="checkbox"
                       checked={selectedCategories.includes(slug)}
                       onChange={() => toggleCategory(slug)}
-                      className="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+                      className="sr-only"
                     />
+                    <span className={`flex h-7 w-7 items-center justify-center rounded-md ${color}`}>
+                      <Icon name={icon} />
+                    </span>
                     {title}
                   </label>
                 ))}
               </div>
             </fieldset>
 
-            <fieldset className="mt-6 border-t border-gray-200 pt-5 dark:border-gray-700">
-              <legend className="text-sm font-semibold">Price range</legend>
-              <div className="mt-3 grid grid-cols-2 gap-2">
+            <fieldset className="mt-4 border-t border-gray-200 pt-3.5 dark:border-gray-700">
+              <legend className="text-xs font-bold uppercase tracking-wide text-gray-500">Price range</legend>
+              <div className="mt-2 grid grid-cols-2 gap-2">
                 <label className="text-xs text-gray-500">
                   Min
                   <input
@@ -286,7 +301,7 @@ export function HomePage() {
                     value={priceMin}
                     onChange={(event) => setPriceMin(event.target.value)}
                     placeholder="৳0"
-                    className="mt-1 w-full rounded-lg border border-gray-300 bg-white px-2 py-2 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-800 dark:text-white"
+                    className="mt-1 w-full rounded-lg border border-gray-300 bg-white px-2 py-1.5 text-xs text-gray-900 outline-none focus:border-primary-500 dark:border-gray-600 dark:bg-gray-800 dark:text-white"
                   />
                 </label>
                 <label className="text-xs text-gray-500">
@@ -297,28 +312,32 @@ export function HomePage() {
                     value={priceMax}
                     onChange={(event) => setPriceMax(event.target.value)}
                     placeholder="৳500"
-                    className="mt-1 w-full rounded-lg border border-gray-300 bg-white px-2 py-2 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-800 dark:text-white"
+                    className="mt-1 w-full rounded-lg border border-gray-300 bg-white px-2 py-1.5 text-xs text-gray-900 outline-none focus:border-primary-500 dark:border-gray-600 dark:bg-gray-800 dark:text-white"
                   />
                 </label>
               </div>
             </fieldset>
 
-            <label className="mt-6 flex cursor-pointer items-center gap-2.5 border-t border-gray-200 pt-5 text-sm dark:border-gray-700">
+            <label className="mt-4 flex cursor-pointer items-center justify-between rounded-xl border border-gray-200 p-2.5 text-xs dark:border-gray-700">
+              <span>
+                <span className="block font-semibold">Organic only</span>
+                <span className="mt-0.5 block text-[10px] text-gray-500">Certified organic products</span>
+              </span>
               <input
                 type="checkbox"
                 checked={organicOnly}
                 onChange={(event) => setOrganicOnly(event.target.checked)}
-                className="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+                className="h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
               />
-              Organic only
             </label>
+            </div>
           </aside>
 
           <div className="min-w-0">
             {products.isLoading ? (
               <PageLoader />
             ) : productsToDisplay.length ? (
-              <div className="grid grid-cols-2 gap-2.5 sm:gap-3 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7">
+              <div className="grid grid-cols-2 gap-2.5 sm:gap-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
                 {productsToDisplay.map((product, index) => (
                   <ProductCard key={`${product.id}-${index}`} product={product} compact />
                 ))}
@@ -334,7 +353,7 @@ export function HomePage() {
       </section>
       {filtersOpen && (
         <div
-          className="fixed inset-0 z-[70]"
+          className="fixed inset-0 z-[70] lg:hidden"
           role="dialog"
           aria-modal="true"
           aria-labelledby="filters-title"
@@ -355,14 +374,25 @@ export function HomePage() {
                   Filters
                 </h2>
               </div>
-              <button
-                type="button"
-                onClick={() => setFiltersOpen(false)}
-                className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
-                aria-label="Close filters"
-              >
-                <Icon name="times" />
-              </button>
+              <div className="flex items-center gap-2">
+                {hasFilters && (
+                  <button
+                    type="button"
+                    onClick={resetFilters}
+                    className="rounded-lg px-3 py-2 text-sm font-semibold text-primary-600 hover:bg-primary-50 dark:text-primary-400 dark:hover:bg-gray-800"
+                  >
+                    Reset
+                  </button>
+                )}
+                <button
+                  type="button"
+                  onClick={() => setFiltersOpen(false)}
+                  className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+                  aria-label="Close filters"
+                >
+                  <Icon name="times" />
+                </button>
+              </div>
             </div>
 
             <div className="flex-1 overflow-y-auto px-5 py-5">
@@ -442,19 +472,11 @@ export function HomePage() {
               </label>
             </div>
 
-            <div className="grid grid-cols-[auto_1fr] gap-3 border-t border-gray-200 p-4 dark:border-gray-700">
-              <button
-                type="button"
-                onClick={resetFilters}
-                disabled={!hasFilters}
-                className="rounded-xl border border-gray-300 px-4 py-2.5 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-40 dark:border-gray-600"
-              >
-                Reset
-              </button>
+            <div className="border-t border-gray-200 p-4 dark:border-gray-700">
               <button
                 type="button"
                 onClick={() => setFiltersOpen(false)}
-                className="rounded-xl bg-primary-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-primary-700"
+                className="w-full rounded-xl bg-primary-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-primary-700"
               >
                 Show {productsToDisplay.length} products
               </button>
