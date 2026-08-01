@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { BrandLogo } from '@/components/common/BrandLogo';
 import { Icon } from '@/components/common/Icon';
-import { APP_DESCRIPTION, APP_NAME, SUPPORT_EMAIL } from '@/constants/app';
+import { APP_DESCRIPTION, APP_NAME } from '@/constants/app';
 import { ROUTES } from '@/constants/routes';
 
 export function SiteFooter() {
@@ -58,9 +58,10 @@ export function SiteFooter() {
           <FooterLinks
             title="Support"
             links={[
+              [ROUTES.support, 'Support Center'],
+              [ROUTES.faq, 'FAQ'],
               [ROUTES.orders, 'My Orders'],
               [ROUTES.forgotPassword, 'Account Help'],
-              [`mailto:${SUPPORT_EMAIL}`, 'Contact Us'],
             ]}
           />
         </div>

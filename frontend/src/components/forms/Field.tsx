@@ -7,7 +7,7 @@ import {
 import { cn } from '@/utils/cn';
 
 const control =
-  'mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-gray-900 placeholder:text-gray-400 dark:border-gray-600 dark:bg-gray-700 dark:text-white';
+  'mt-1 w-full rounded-lg border border-emerald-200 bg-emerald-50/60 px-3 py-2.5 text-gray-900 placeholder:text-gray-400 focus:border-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white';
 
 interface BaseProps {
   label: string;

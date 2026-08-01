@@ -4,11 +4,11 @@ import { ThemeContext, THEME_STORAGE_KEY, type ThemeMode } from './theme-context
 function getStoredMode(): ThemeMode {
   try {
     const stored = localStorage.getItem(THEME_STORAGE_KEY);
-    if (stored === 'dark' || stored === 'light') return stored;
+    if (stored === 'dark' || stored === 'light' || stored === 'system') return stored;
   } catch {
     /* localStorage unavailable — fall through to system */
   }
-  return 'system';
+  return 'dark';
 }
 
 function systemPrefersDark(): boolean {
@@ -48,8 +48,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   const setMode = useCallback((next: ThemeMode) => {
     setModeState(next);
     try {
-      if (next === 'system') localStorage.removeItem(THEME_STORAGE_KEY);
-      else localStorage.setItem(THEME_STORAGE_KEY, next);
+      localStorage.setItem(THEME_STORAGE_KEY, next);
     } catch {
       /* ignore persistence failures */
     }

@@ -1,5 +1,5 @@
-import { NavLink, Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { useEffect, useState, type FormEvent } from 'react';
+import { NavLink, Link } from 'react-router-dom';
+import { useState } from 'react';
 import { BrandLogo } from '@/components/common/BrandLogo';
 import { Icon } from '@/components/common/Icon';
 import { ROUTES } from '@/constants/routes';
@@ -14,20 +14,8 @@ const links = [
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
-  const [searchInput, setSearchInput] = useState('');
-  const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
   const { count } = useCart();
   const { resolvedTheme, toggle } = useTheme();
-  const activeSearch = searchParams.get('search') ?? '';
-
-  useEffect(() => setSearchInput(activeSearch), [activeSearch]);
-
-  const submitSearch = (event: FormEvent) => {
-    event.preventDefault();
-    const query = searchInput.trim();
-    void navigate(query ? `${ROUTES.home}?search=${encodeURIComponent(query)}` : ROUTES.home);
-  };
 
   return (
     <header className="sticky top-0 z-50 isolate overflow-hidden border-b border-emerald-200/70 bg-gradient-to-r from-emerald-50/95 via-white/95 to-lime-50/95 shadow-[0_8px_30px_-16px_rgba(5,150,105,0.45)] backdrop-blur-xl dark:border-emerald-900/60 dark:from-gray-900/95 dark:via-gray-800/95 dark:to-emerald-950/95 dark:shadow-[0_8px_30px_-16px_rgba(0,0,0,0.8)]">
@@ -58,29 +46,7 @@ export function SiteHeader() {
       >
         <div className="flex h-16 items-center justify-between gap-4">
           <BrandLogo markHref={ROUTES.home} />
-          <form
-            onSubmit={submitSearch}
-            className="hidden h-11 min-w-0 max-w-xl flex-1 items-center overflow-hidden rounded-xl border border-emerald-200/80 bg-white/80 p-1 shadow-sm shadow-emerald-900/5 backdrop-blur-md transition focus-within:border-primary-500 focus-within:ring-2 focus-within:ring-primary-500/25 dark:border-gray-600 dark:bg-gray-950/75 dark:shadow-black/20 lg:flex"
-          >
-            <label htmlFor="nav-product-search" className="sr-only">
-              Search products
-            </label>
-            <Icon name="search" className="ml-3 text-gray-400" />
-            <input
-              id="nav-product-search"
-              value={searchInput}
-              onChange={(event) => setSearchInput(event.target.value)}
-              className="nav-search-input min-w-0 flex-1 bg-transparent px-3 py-2 text-sm text-gray-900 caret-primary-600 outline-none placeholder:text-gray-400 focus-visible:ring-0 focus-visible:ring-offset-0 dark:text-white"
-              placeholder="Search essentials..."
-            />
-            <button
-              type="submit"
-              className="ml-1 h-9 min-w-[5.5rem] rounded-lg bg-primary-600 px-4 text-sm font-semibold text-white shadow-sm transition hover:bg-primary-700 focus-visible:ring-2 focus-visible:ring-primary-300 focus-visible:ring-offset-0"
-            >
-              Search
-            </button>
-          </form>
-
+          <div className="ml-auto flex items-center gap-3">
           <div className="hidden items-center gap-1 rounded-xl border border-emerald-100/80 bg-white/50 p-1 shadow-sm backdrop-blur-sm dark:border-gray-700/70 dark:bg-gray-900/50 md:flex">
             {links.map(([to, label]) => (
               <NavLink
@@ -143,30 +109,8 @@ export function SiteHeader() {
               <Icon name={open ? 'times' : 'bars'} />
             </button>
           </div>
+          </div>
         </div>
-
-        <form
-          onSubmit={submitSearch}
-          className="mb-3 flex h-11 items-center overflow-hidden rounded-xl border border-emerald-200/80 bg-white/80 p-1 shadow-sm backdrop-blur-md transition focus-within:border-primary-500 focus-within:ring-2 focus-within:ring-primary-500/25 dark:border-gray-600 dark:bg-gray-950/80 lg:hidden"
-        >
-          <label htmlFor="mobile-nav-product-search" className="sr-only">
-            Search products
-          </label>
-          <Icon name="search" className="ml-3 text-gray-400" />
-          <input
-            id="mobile-nav-product-search"
-            value={searchInput}
-            onChange={(event) => setSearchInput(event.target.value)}
-            className="nav-search-input min-w-0 flex-1 bg-transparent px-3 py-2 text-sm text-gray-900 caret-primary-600 outline-none placeholder:text-gray-400 focus-visible:ring-0 focus-visible:ring-offset-0 dark:text-white"
-            placeholder="Search essentials..."
-          />
-          <button
-            type="submit"
-            className="ml-1 h-9 min-w-[5.5rem] rounded-lg bg-primary-600 px-4 text-sm font-semibold text-white shadow-sm transition hover:bg-primary-700 focus-visible:ring-2 focus-visible:ring-primary-300 focus-visible:ring-offset-0"
-          >
-            Search
-          </button>
-        </form>
 
         {open && (
           <div

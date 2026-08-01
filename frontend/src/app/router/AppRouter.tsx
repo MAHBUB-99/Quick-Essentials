@@ -1,5 +1,5 @@
 import { lazy, Suspense } from 'react';
-import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, Navigate, Outlet, RouterProvider } from 'react-router-dom';
 import { MarketplaceLayout } from '@/app/layouts/MarketplaceLayout';
 import { PageLoader } from '@/components/feedback/PageState';
 import { ROUTES, ROUTE_PATTERNS } from '@/constants/routes';
@@ -15,6 +15,12 @@ const ProductDetailsPage = lazy(() =>
 );
 const AboutPage = lazy(() =>
   import('@/features/about/AboutPage').then((module) => ({ default: module.AboutPage })),
+);
+const FaqPage = lazy(() =>
+  import('@/features/faq/FaqPage').then((module) => ({ default: module.FaqPage })),
+);
+const SupportPage = lazy(() =>
+  import('@/features/support/SupportPage').then((module) => ({ default: module.SupportPage })),
 );
 const CartPage = lazy(() =>
   import('@/features/cart/CartPage').then((module) => ({ default: module.CartPage })),
@@ -56,6 +62,26 @@ const ManageListingsPage = lazy(() =>
 const suspense = (element: React.ReactNode) => (
   <Suspense fallback={<PageLoader />}>{element}</Suspense>
 );
+const ManageCategoriesPage = lazy(() =>
+  import('@/features/dashboard/DashboardPages').then((module) => ({
+    default: module.ManageCategoriesPage,
+  })),
+);
+const EditListingPage = lazy(() =>
+  import('@/features/dashboard/DashboardPages').then((module) => ({
+    default: module.EditListingPage,
+  })),
+);
+const ManageNotificationsPage = lazy(() =>
+  import('@/features/dashboard/DashboardPages').then((module) => ({
+    default: module.ManageNotificationsPage,
+  })),
+);
+
+function AdminRoute() {
+  const isAdmin = window.sessionStorage.getItem('quickessentials-admin') === 'true';
+  return isAdmin ? <Outlet /> : <Navigate to={ROUTES.login} replace />;
+}
 
 const router = createBrowserRouter([
   {
@@ -66,6 +92,8 @@ const router = createBrowserRouter([
       { path: ROUTES.products, element: <Navigate to={ROUTES.home} replace /> },
       { path: ROUTE_PATTERNS.productDetails, element: suspense(<ProductDetailsPage />) },
       { path: ROUTES.about, element: suspense(<AboutPage />) },
+      { path: ROUTES.faq, element: suspense(<FaqPage />) },
+      { path: ROUTES.support, element: suspense(<SupportPage />) },
       { path: ROUTES.cart, element: suspense(<CartPage />) },
       { path: ROUTES.login, element: suspense(<LoginPage />) },
       { path: ROUTES.register, element: suspense(<RegisterPage />) },
@@ -74,8 +102,16 @@ const router = createBrowserRouter([
       { path: ROUTES.orderSuccess, element: suspense(<PaymentSuccessPage />) },
       { path: ROUTES.orders, element: suspense(<OrdersPage />) },
       { path: `${ROUTES.orders}/:id/review`, element: suspense(<ReviewPage />) },
-      { path: ROUTES.dashboardProducts, element: suspense(<ManageListingsPage />) },
-      { path: ROUTES.dashboardProductNew, element: suspense(<CreateListingPage />) },
+      {
+        element: <AdminRoute />,
+        children: [
+          { path: ROUTES.dashboardProducts, element: suspense(<ManageListingsPage />) },
+          { path: ROUTES.dashboardProductNew, element: suspense(<CreateListingPage />) },
+          { path: ROUTE_PATTERNS.dashboardProductEdit, element: suspense(<EditListingPage />) },
+          { path: ROUTES.dashboardCategories, element: suspense(<ManageCategoriesPage />) },
+          { path: ROUTES.dashboardNotifications, element: suspense(<ManageNotificationsPage />) },
+        ],
+      },
       { path: ROUTES.unauthorized, element: <UnauthorizedPage /> },
       { path: '*', element: <NotFoundPage /> },
     ],

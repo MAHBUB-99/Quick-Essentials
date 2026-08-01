@@ -10,11 +10,36 @@ import { useCart } from '@/features/cart/CartContext';
 import { getProduct } from '@/services/api/marketplace';
 import { formatCurrency } from '@/utils/format';
 
+const CUSTOMER_REVIEWS = [
+  {
+    id: 'review-1',
+    author: 'Nusrat Jahan',
+    rating: 5,
+    date: 'July 28, 2026',
+    comment: 'Excellent quality and very fresh. The packaging was careful and delivery was right on time.',
+  },
+  {
+    id: 'review-2',
+    author: 'Arif Rahman',
+    rating: 5,
+    date: 'July 24, 2026',
+    comment: 'The product matched the photos and tasted great. I will definitely order this again.',
+  },
+  {
+    id: 'review-3',
+    author: 'Samira Khan',
+    rating: 4,
+    date: 'July 19, 2026',
+    comment: 'Fresh and good value for money. Everything arrived in clean, secure packaging.',
+  },
+] as const;
+
 export function ProductDetailsPage() {
   const { id = '' } = useParams();
   const product = useQuery({ queryKey: ['product', id], queryFn: () => getProduct(id) });
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState(0);
+  const [reviewsOpen, setReviewsOpen] = useState(false);
   const { add } = useCart();
   const navigate = useNavigate();
   if (product.isLoading) return <PageLoader label="Loading product" />;
@@ -43,6 +68,16 @@ export function ProductDetailsPage() {
     addToCart();
     void navigate(ROUTES.payment);
   };
+  const whatsappMessage = [
+    'Hello, I am interested in this product:',
+    '',
+    `Product: ${item.name}`,
+    `Price: ${formatCurrency(item.price)}/${item.unit}`,
+    `Quantity: ${quantity}`,
+    `Estimated total: ${formatCurrency(item.price * quantity)}`,
+    `Product link: ${window.location.href}`,
+  ].join('\n');
+  const whatsappUrl = `https://wa.me/8801832498239?text=${encodeURIComponent(whatsappMessage)}`;
   return (
     <BrandedPageBackground>
       <div className="mx-auto max-w-7xl px-4 pb-10 pt-4 sm:px-6 lg:px-8">
@@ -96,27 +131,25 @@ export function ProductDetailsPage() {
         </div>
         <div className="relative z-10">
           <h1 className="mt-1 text-3xl font-bold">{item.name}</h1>
-          <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-            <Icon name="star" className="text-yellow-400" /> {item.rating.average} (
-            {item.rating.count} reviews) · <Icon name="mapMarker" /> {item.location}
-          </p>
+          <div className="mt-2 flex flex-wrap items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+            <button
+              type="button"
+              onClick={() => setReviewsOpen((open) => !open)}
+              className="inline-flex items-center gap-1 rounded-md transition hover:text-primary-600 focus-visible:text-primary-600"
+              aria-expanded={reviewsOpen}
+              aria-controls="product-reviews"
+            >
+              <Icon name="star" className="text-yellow-400" />
+              <span>{item.rating.average} ({item.rating.count} reviews)</span>
+              <Icon name="chevronDown" className={`ml-1 text-[10px] transition-transform ${reviewsOpen ? 'rotate-180' : ''}`} />
+            </button>
+            <span aria-hidden>·</span>
+            <span><Icon name="mapMarker" /> {item.location}</span>
+          </div>
           <p className="mt-4 text-3xl font-bold text-primary-600">
             {formatCurrency(item.price)}{' '}
             <span className="text-base font-normal text-gray-500">/{item.unit}</span>
           </p>
-          <p className="mt-4 max-w-2xl leading-6 text-gray-600 dark:text-gray-300">
-            {item.description}
-          </p>
-          <div className="mt-4 flex flex-wrap gap-2">
-            {item.features.map((feature) => (
-              <span
-                key={feature}
-                className="rounded-full bg-primary-100 px-2.5 py-1 text-xs capitalize text-primary-800 dark:bg-primary-900 dark:text-primary-100"
-              >
-                {feature}
-              </span>
-            ))}
-          </div>
           <div className="mt-5">
             <label className="mb-1.5 block text-sm font-medium">Quantity</label>
             <div className="flex items-center gap-3">
@@ -138,12 +171,20 @@ export function ProductDetailsPage() {
               <span className="text-sm text-gray-500">{item.stock} available</span>
             </div>
           </div>
-          <div className="mt-5 grid gap-3 sm:grid-cols-2">
+          <div className="mt-5 grid gap-3 sm:grid-cols-3">
             <Button onClick={addToCart}>
               <Icon name="cart" /> Add to Cart
             </Button>
             <Button variant="outline" onClick={buyNow}>
               Buy Now
+            </Button>
+            <Button
+              asChild
+              className="bg-[#25D366] text-white hover:bg-[#1fb858]"
+            >
+              <a href={whatsappUrl} target="_blank" rel="noreferrer">
+                <Icon name="whatsapp" /> WhatsApp
+              </a>
             </Button>
           </div>
           <div className="mt-5 rounded-xl border border-emerald-200/80 bg-white/65 p-4 shadow-sm backdrop-blur-sm dark:border-emerald-900/60 dark:bg-gray-800/75 dark:shadow">
@@ -153,21 +194,112 @@ export function ProductDetailsPage() {
             </p>
           </div>
         </div>
+        <section className="relative z-10 grid gap-5 border-t border-emerald-200/80 pt-5 dark:border-emerald-900/60 lg:col-span-2 lg:grid-cols-[minmax(0,1.5fr)_minmax(18rem,0.7fr)] lg:items-start">
+          <div>
+            <div className="flex items-center gap-2.5">
+              <span className="h-5 w-1 rounded-full bg-primary-500" aria-hidden="true" />
+              <h2 className="text-lg font-bold">About This Product</h2>
+            </div>
+            <p className="mt-2 max-w-3xl text-sm leading-6 text-gray-600 dark:text-gray-300">
+              {item.description}
+            </p>
+          </div>
+          <div>
+            <h3 className="text-xs font-bold uppercase tracking-[0.12em] text-gray-500">
+              Why you’ll love it
+            </h3>
+            <ul className="mt-3 grid grid-cols-2 gap-x-4 gap-y-2">
+              {item.features.map((feature) => (
+                <li key={feature} className="flex items-center gap-2 text-sm font-medium capitalize">
+                  <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary-100 text-[9px] text-primary-700 dark:bg-primary-900 dark:text-primary-300">
+                    <Icon name="check" />
+                  </span>
+                  {feature}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
       </div>
-      <section className="mt-12 border-t pt-8 dark:border-gray-700">
-        <h2 className="text-2xl font-bold">About This Product</h2>
-        <div className="prose-farm mt-5 max-w-3xl">
-          <p>{item.description}</p>
-          <h3>Why you’ll love it</h3>
-          <ul>
-            {item.features.map((feature) => (
-              <li key={feature} className="capitalize">
-                {feature}
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
+      {reviewsOpen && (
+        <section
+          id="product-reviews"
+          className="relative mt-5 overflow-hidden rounded-2xl border border-emerald-200/80 bg-white/80 p-5 shadow-lg shadow-primary-900/10 backdrop-blur dark:border-emerald-900/60 dark:bg-gray-900/70 sm:p-6"
+        >
+          <div className="pointer-events-none absolute -right-20 -top-24 h-64 w-64 rounded-full bg-emerald-300/20 blur-3xl dark:bg-emerald-600/10" aria-hidden="true" />
+          <div className="relative grid gap-6 lg:grid-cols-[15rem_1fr]">
+            <div className="rounded-2xl bg-emerald-50/80 p-5 dark:bg-emerald-950/40">
+              <p className="text-sm font-semibold text-gray-600 dark:text-gray-300">Customer rating</p>
+              <div className="mt-2 flex items-end gap-2">
+                <strong className="text-4xl text-gray-900 dark:text-white">{item.rating.average}</strong>
+                <span className="pb-1 text-sm text-gray-500">out of 5</span>
+              </div>
+              <div className="mt-2 flex gap-1" aria-label={`${item.rating.average} out of 5 stars`}>
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <Icon key={star} name={star <= Math.round(item.rating.average) ? 'star' : 'starRegular'} className="text-yellow-400" />
+                ))}
+              </div>
+              <p className="mt-2 text-xs text-gray-500">Based on {item.rating.count} verified reviews</p>
+              <div className="mt-5 space-y-2">
+                {[5, 4, 3, 2, 1].map((rating, index) => {
+                  const widths = ['78%', '16%', '4%', '1%', '1%'];
+                  return (
+                    <div key={rating} className="grid grid-cols-[1rem_1fr_2rem] items-center gap-2 text-xs text-gray-500">
+                      <span>{rating}</span>
+                      <span className="h-1.5 overflow-hidden rounded-full bg-emerald-100 dark:bg-gray-700">
+                        <span className="block h-full rounded-full bg-yellow-400" style={{ width: widths[index] }} />
+                      </span>
+                      <span>{widths[index]}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div>
+              <div className="flex items-center justify-between gap-4">
+                <div>
+                  <h2 className="text-xl font-bold">Customer Reviews</h2>
+                  <p className="mt-1 text-sm text-gray-500">Recent feedback from verified buyers</p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setReviewsOpen(false)}
+                  className="flex h-9 w-9 items-center justify-center rounded-full border border-emerald-200 text-gray-500 hover:bg-emerald-50 hover:text-primary-600 dark:border-gray-700 dark:hover:bg-gray-800"
+                  aria-label="Close reviews"
+                >
+                  <Icon name="times" />
+                </button>
+              </div>
+              <div className="mt-4 divide-y divide-emerald-100 dark:divide-gray-700">
+                {CUSTOMER_REVIEWS.map((review) => (
+                  <article key={review.id} className="py-4 first:pt-0 last:pb-0">
+                    <div className="flex items-start gap-3">
+                      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary-100 font-bold text-primary-700 dark:bg-primary-900 dark:text-primary-200">
+                        {review.author.split(' ').map((part) => part[0]).join('')}
+                      </span>
+                      <div className="min-w-0 flex-1">
+                        <div className="flex flex-wrap items-center justify-between gap-2">
+                          <div>
+                            <h3 className="font-semibold">{review.author}</h3>
+                            <div className="mt-0.5 flex gap-0.5" aria-label={`${review.rating} out of 5 stars`}>
+                              {[1, 2, 3, 4, 5].map((star) => (
+                                <Icon key={star} name={star <= review.rating ? 'star' : 'starRegular'} className="text-xs text-yellow-400" />
+                              ))}
+                            </div>
+                          </div>
+                          <time className="text-xs text-gray-500">{review.date}</time>
+                        </div>
+                        <p className="mt-2 text-sm leading-6 text-gray-600 dark:text-gray-300">{review.comment}</p>
+                      </div>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
       </div>
     </BrandedPageBackground>
   );

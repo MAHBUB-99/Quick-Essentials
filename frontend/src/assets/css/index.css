@@ -12,7 +12,7 @@
   }
 
   body {
-    @apply bg-gray-50 text-gray-900 transition-colors duration-300 dark:bg-gray-900 dark:text-gray-100;
+    @apply bg-emerald-50 text-gray-900 transition-colors duration-300 dark:bg-gray-900 dark:text-gray-100;
     font-family:
       ui-sans-serif,
       system-ui,
@@ -40,7 +40,7 @@
   .nav-search-input:-webkit-autofill:hover,
   .nav-search-input:-webkit-autofill:focus {
     -webkit-text-fill-color: #111827;
-    box-shadow: 0 0 0 1000px #f9fafb inset;
+    box-shadow: 0 0 0 1000px #f0fdf4 inset;
     caret-color: #16a34a;
   }
 
@@ -53,7 +53,7 @@
 
   /* Consistent focus ring for keyboard users across the design system. */
   :focus-visible {
-    @apply outline-none ring-2 ring-primary-500 ring-offset-2 ring-offset-white dark:ring-offset-gray-900;
+    @apply outline-none ring-2 ring-primary-500 ring-offset-2 ring-offset-emerald-50 dark:ring-offset-gray-900;
   }
 }
 
@@ -74,6 +74,20 @@
 }
 
 @layer utilities {
+  /* Light-mode botanical surfaces. Higher selector specificity lets existing
+     components inherit the palette without changing their dark variants. */
+  html:not(.dark) .bg-white {
+    background-color: #f8fdf9;
+  }
+
+  html:not(.dark) .bg-gray-50 {
+    background-color: #f0fdf4;
+  }
+
+  html:not(.dark) .bg-gray-100 {
+    background-color: #e8f7ed;
+  }
+
   @keyframes offer-ticker {
     from {
       transform: translateX(0);

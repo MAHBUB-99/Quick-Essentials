@@ -7,6 +7,8 @@ export const ROUTES = {
   products: '/products',
   productDetails: (id: string | number = ':id') => `/products/${id}`,
   about: '/about',
+  faq: '/faq',
+  support: '/support',
   cart: '/cart',
   favourites: '/favourites',
   login: '/login',
@@ -19,6 +21,8 @@ export const ROUTES = {
   dashboardProducts: '/dashboard/products',
   dashboardProductNew: '/dashboard/products/new',
   dashboardProductEdit: (id: string | number = ':id') => `/dashboard/products/${id}/edit`,
+  dashboardCategories: '/dashboard/categories',
+  dashboardNotifications: '/dashboard/notifications',
   unauthorized: '/unauthorized',
 } as const;
 
