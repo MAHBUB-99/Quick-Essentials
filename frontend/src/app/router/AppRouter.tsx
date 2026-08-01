@@ -16,6 +16,12 @@ const ProductDetailsPage = lazy(() =>
 const AboutPage = lazy(() =>
   import('@/features/about/AboutPage').then((module) => ({ default: module.AboutPage })),
 );
+const FaqPage = lazy(() =>
+  import('@/features/faq/FaqPage').then((module) => ({ default: module.FaqPage })),
+);
+const SupportPage = lazy(() =>
+  import('@/features/support/SupportPage').then((module) => ({ default: module.SupportPage })),
+);
 const CartPage = lazy(() =>
   import('@/features/cart/CartPage').then((module) => ({ default: module.CartPage })),
 );
@@ -86,6 +92,8 @@ const router = createBrowserRouter([
       { path: ROUTES.products, element: <Navigate to={ROUTES.home} replace /> },
       { path: ROUTE_PATTERNS.productDetails, element: suspense(<ProductDetailsPage />) },
       { path: ROUTES.about, element: suspense(<AboutPage />) },
+      { path: ROUTES.faq, element: suspense(<FaqPage />) },
+      { path: ROUTES.support, element: suspense(<SupportPage />) },
       { path: ROUTES.cart, element: suspense(<CartPage />) },
       { path: ROUTES.login, element: suspense(<LoginPage />) },
       { path: ROUTES.register, element: suspense(<RegisterPage />) },

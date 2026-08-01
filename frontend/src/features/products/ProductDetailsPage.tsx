@@ -68,6 +68,16 @@ export function ProductDetailsPage() {
     addToCart();
     void navigate(ROUTES.payment);
   };
+  const whatsappMessage = [
+    'Hello, I am interested in this product:',
+    '',
+    `Product: ${item.name}`,
+    `Price: ${formatCurrency(item.price)}/${item.unit}`,
+    `Quantity: ${quantity}`,
+    `Estimated total: ${formatCurrency(item.price * quantity)}`,
+    `Product link: ${window.location.href}`,
+  ].join('\n');
+  const whatsappUrl = `https://wa.me/8801832498239?text=${encodeURIComponent(whatsappMessage)}`;
   return (
     <BrandedPageBackground>
       <div className="mx-auto max-w-7xl px-4 pb-10 pt-4 sm:px-6 lg:px-8">
@@ -161,12 +171,20 @@ export function ProductDetailsPage() {
               <span className="text-sm text-gray-500">{item.stock} available</span>
             </div>
           </div>
-          <div className="mt-5 grid gap-3 sm:grid-cols-2">
+          <div className="mt-5 grid gap-3 sm:grid-cols-3">
             <Button onClick={addToCart}>
               <Icon name="cart" /> Add to Cart
             </Button>
             <Button variant="outline" onClick={buyNow}>
               Buy Now
+            </Button>
+            <Button
+              asChild
+              className="bg-[#25D366] text-white hover:bg-[#1fb858]"
+            >
+              <a href={whatsappUrl} target="_blank" rel="noreferrer">
+                <Icon name="whatsapp" /> WhatsApp
+              </a>
             </Button>
           </div>
           <div className="mt-5 rounded-xl border border-emerald-200/80 bg-white/65 p-4 shadow-sm backdrop-blur-sm dark:border-emerald-900/60 dark:bg-gray-800/75 dark:shadow">

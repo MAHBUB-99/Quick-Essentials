@@ -8,8 +8,6 @@ export const APP_DESCRIPTION =
 /** Bangladeshi Taka — the currency used throughout the source templates. */
 export const CURRENCY_SYMBOL = '৳';
 
-export const SUPPORT_EMAIL = 'support@quickessentials.example';
-
 /** Simulated network latency (ms) for the mock service layer. */
 export const MOCK_LATENCY_MS = 400;
 

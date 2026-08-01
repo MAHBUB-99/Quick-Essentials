@@ -7,6 +7,8 @@ export const ROUTES = {
   products: '/products',
   productDetails: (id: string | number = ':id') => `/products/${id}`,
   about: '/about',
+  faq: '/faq',
+  support: '/support',
   cart: '/cart',
   favourites: '/favourites',
   login: '/login',

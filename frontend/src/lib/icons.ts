@@ -4,6 +4,7 @@ import {
   faGoogle,
   faInstagram,
   faTwitter,
+  faWhatsapp,
 } from '@fortawesome/free-brands-svg-icons';
 import {
   faCircle as faCircleRegular,
@@ -150,6 +151,7 @@ export const ICONS = {
   facebook: faFacebookF,
   twitter: faTwitter,
   instagram: faInstagram,
+  whatsapp: faWhatsapp,
   apple: faApple,
 } satisfies Record<string, IconDefinition>;
 

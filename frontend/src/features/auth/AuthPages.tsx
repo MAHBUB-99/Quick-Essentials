@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 import { Button } from '@/components/common/Button';
+import { Icon } from '@/components/common/Icon';
 import { Field, SelectField, TextareaField } from '@/components/forms/Field';
 import { ROUTES } from '@/constants/routes';
 
@@ -222,9 +223,13 @@ export function LoginPage() {
           <button
             type="button"
             onClick={toggleAdminLogin}
-            className="text-xs text-gray-400 transition hover:text-primary-600 focus-visible:text-primary-600"
+            className="group relative flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-emerald-200/80 bg-gradient-to-br from-emerald-50 to-emerald-100 text-primary-700 shadow-sm transition hover:-translate-y-0.5 hover:border-primary-400 hover:shadow-md hover:shadow-primary-900/10 dark:border-emerald-800 dark:from-emerald-950 dark:to-gray-900 dark:text-primary-300"
+            aria-label="Open administrator sign in"
+            title="Administrator access"
           >
-            Staff access
+            <span className="absolute inset-1 rounded-full border border-primary-500/15 transition group-hover:border-primary-500/30" aria-hidden="true" />
+            <Icon name="key" className="relative text-sm transition-transform group-hover:-rotate-12" />
+            <span className="absolute right-0.5 top-0.5 h-1.5 w-1.5 rounded-full bg-primary-500 ring-2 ring-emerald-50 dark:ring-gray-900" aria-hidden="true" />
           </button>
         </div>
       )}

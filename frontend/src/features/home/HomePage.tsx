@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { useSearchParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type FormEvent } from 'react';
 import { ProductCard } from '@/components/cards/ProductCard';
 import { Icon } from '@/components/common/Icon';
 import { PageLoader } from '@/components/feedback/PageState';
@@ -27,6 +27,7 @@ const FALLBACK_CATEGORY_STYLE = {
 export function HomePage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const search = searchParams.get('search')?.trim() ?? '';
+  const [searchInput, setSearchInput] = useState(search);
   const [selectedCategories, setSelectedCategories] = useState<CategorySlug[]>([]);
   const [organicOnly, setOrganicOnly] = useState(false);
   const [priceMin, setPriceMin] = useState('');
@@ -93,6 +94,18 @@ export function HomePage() {
     setPriceMax('');
     setSort('rating');
   };
+  const submitSearch = (event: FormEvent) => {
+    event.preventDefault();
+    const query = searchInput.trim();
+    setSearchParams((current) => {
+      const next = new URLSearchParams(current);
+      if (query) next.set('search', query);
+      else next.delete('search');
+      return next;
+    });
+  };
+
+  useEffect(() => setSearchInput(search), [search]);
 
   useEffect(() => {
     if (!filtersOpen) return;
@@ -156,9 +169,39 @@ export function HomePage() {
           <path d="M91 96C105 95 114 88 116 76C102 74 93 81 91 96Z" fill="currentColor" />
         </svg>
       </div>
-      <div className="relative z-10">
+      <div className="relative z-10 flex flex-col">
+      <div className="order-2 px-3 py-3 sm:px-5 lg:px-7">
+        <div className="mx-auto grid max-w-[100rem] lg:grid-cols-[13.5rem_minmax(0,1fr)] lg:gap-4">
+          <span className="hidden lg:block" aria-hidden="true" />
+        <form
+          onSubmit={submitSearch}
+          className="mx-auto flex h-12 w-full max-w-3xl items-center overflow-hidden rounded-2xl border border-emerald-300/80 bg-white/85 p-1 shadow-lg shadow-emerald-950/10 backdrop-blur-xl transition focus-within:border-primary-500 focus-within:ring-2 focus-within:ring-primary-500/20 dark:border-emerald-800/70 dark:bg-gray-950/80 dark:shadow-black/30"
+        >
+          <label htmlFor="product-page-search" className="sr-only">Search products</label>
+          <Icon name="search" className="ml-3 text-primary-600 dark:text-primary-400" />
+          <input
+            id="product-page-search"
+            type="search"
+            value={searchInput}
+            onChange={(event) => {
+              const value = event.target.value;
+              setSearchInput(value);
+              if (!value && search) resetFilters();
+            }}
+            className="nav-search-input min-w-0 flex-1 bg-transparent px-3 py-2 text-sm text-gray-900 caret-primary-600 outline-none placeholder:text-gray-500 focus-visible:ring-0 focus-visible:ring-offset-0 dark:text-white dark:placeholder:text-gray-400 sm:text-base"
+            placeholder="Search fresh products, farms, and essentials..."
+          />
+          <button
+            type="submit"
+            className="h-10 rounded-xl bg-primary-600 px-4 text-sm font-semibold text-white shadow-sm transition hover:bg-primary-700 sm:min-w-24"
+          >
+            Search
+          </button>
+        </form>
+        </div>
+      </div>
       <div
-        className="flex overflow-hidden border-y border-primary-700/40 bg-gradient-to-r from-gray-950 via-emerald-950 to-gray-950 text-emerald-50 shadow-sm"
+        className="order-1 flex overflow-hidden border-y border-primary-700/40 bg-gradient-to-r from-gray-950 via-emerald-950 to-gray-950 text-emerald-50 shadow-sm"
         role="region"
         aria-label="Current offers and notices"
       >
@@ -227,9 +270,9 @@ export function HomePage() {
           </span>
         </div>
       </div>
-      <section className="bg-white/20 pb-16 pt-4 dark:bg-gray-900/45 dark:backdrop-blur-[1px]">
+      <section className="order-3 bg-white/20 pb-16 pt-2 dark:bg-gray-900/45 dark:backdrop-blur-[1px] lg:pt-1">
         <div className="mx-auto grid max-w-[100rem] items-start gap-4 px-3 sm:px-5 lg:grid-cols-[13.5rem_minmax(0,1fr)] lg:px-7">
-          <aside className="sticky top-2 hidden overflow-hidden rounded-2xl border border-emerald-200/80 bg-white/85 shadow-lg shadow-emerald-950/5 backdrop-blur-md dark:border-emerald-900/60 dark:bg-gray-900/85 lg:block">
+          <aside className="sticky top-2 hidden overflow-hidden rounded-2xl border border-emerald-200/80 bg-white/85 shadow-lg shadow-emerald-950/5 backdrop-blur-md dark:border-emerald-900/60 dark:bg-gray-900/85 lg:-mt-16 lg:block">
             <div className="flex items-center justify-between border-b border-emerald-100 px-4 py-3 dark:border-gray-700">
               <div className="flex items-center gap-2">
                 <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary-100 text-primary-700 dark:bg-primary-900 dark:text-primary-300">
